@@ -11,7 +11,11 @@
       "Bash(xargs kill:*)",
       "Bash(open prototype.html)",
       "Bash(node --check prototype.html)",
-      "Bash(node -e ':*)"
+      "Bash(node -e ':*)",
+      "Bash(git push:*)",
+      "Bash(curl -s --connect-timeout 10 https://api.github.com)",
+      "Bash(nslookup github.com)",
+      "Bash(git remote:*)"
     ],
     "additionalDirectories": [
       "/Users/lihaodong/Desktop/超脑/docs/specs"
