@@ -24,7 +24,9 @@
       "Bash(curl -s --connect-timeout 15 https://api.vercel.com/v13/deployments)",
       "Bash(curl -sL --connect-timeout 10 https://blind-running.vercel.app)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(curl -s localhost:5174)",
+      "Bash(lsof -ti:5173,5174)"
     ],
     "additionalDirectories": [
       "/Users/lihaodong/Desktop/超脑/docs/specs"
