@@ -15,7 +15,16 @@
       "Bash(git push:*)",
       "Bash(curl -s --connect-timeout 10 https://api.github.com)",
       "Bash(nslookup github.com)",
-      "Bash(git remote:*)"
+      "Bash(git remote:*)",
+      "Bash(curl -s https://api.vercel.com/v6/deployments?teamId=vercel)",
+      "Bash(curl -s --head https://blind-running.vercel.app)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://blind-running.vercel.app)",
+      "Bash(curl -s --connect-timeout 10 https://github.com/hobartlee/Blind-Running/commits/main)",
+      "Bash(gh api:*)",
+      "Bash(curl -s --connect-timeout 15 https://api.vercel.com/v13/deployments)",
+      "Bash(curl -sL --connect-timeout 10 https://blind-running.vercel.app)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "additionalDirectories": [
       "/Users/lihaodong/Desktop/超脑/docs/specs"
