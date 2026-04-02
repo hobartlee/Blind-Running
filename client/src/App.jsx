@@ -796,7 +796,7 @@ function ClubAdminHomeScreen({ clubData, activities, applications, members, onAp
 function ActivityDetailScreen({ activity, onSignup, onBack }) {
   if (!activity) return null
   return (
-    <div className="screen">
+    <div className="screen active">
       <Header title="活动详情" onBack={onBack} />
       <div className="page">
         <div className="card" style={{ marginBottom: 16 }}>
@@ -848,7 +848,7 @@ function BlindSignupStatusScreen({ signup, activity, onAdvance, onBack }) {
   if (!signup) return null
 
   return (
-    <div className="screen">
+    <div className="screen active">
       <Header title="报名状态" onBack={onBack} />
       <div className="page">
         <Card style={{ marginTop: 16 }}>
@@ -934,7 +934,7 @@ function VolunteerCreateActivityScreen({ onCreate, onBack }) {
   }
 
   return (
-    <div className="screen">
+    <div className="screen active">
       <Header title="发布活动" onBack={onBack} />
       <div className="page">
         <div className="form-group">
@@ -990,7 +990,7 @@ function VolunteerSignupListScreen({ activity, onConfirm, onBack }) {
   const activitySignups = signups.filter(s => s.activityId === activity?.id)
 
   return (
-    <div className="screen">
+    <div className="screen active">
       <Header title="报名列表" onBack={onBack} />
       <div className="page">
         <Card style={{ background: '#f0f7ff', border: '1px solid #bfdbfe', marginBottom: 16 }}>
@@ -1039,7 +1039,7 @@ function ClubCreateActivityScreen({ onCreate, onBack }) {
   }
 
   return (
-    <div className="screen">
+    <div className="screen active">
       <Header title="发布跑团活动" onBack={onBack} />
       <div className="page">
         <div className="form-group">
