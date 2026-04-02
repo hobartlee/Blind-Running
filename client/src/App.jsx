@@ -790,6 +790,293 @@ function ClubAdminHomeScreen({ clubData, activities, applications, members, onAp
   )
 }
 
+// ============ ACTIVITY SCREENS ============
+
+// Activity Detail Screen (Blind User View)
+function ActivityDetailScreen({ activity, onSignup, onBack }) {
+  if (!activity) return null
+  return (
+    <div className="screen">
+      <Header title="活动详情" onBack={onBack} />
+      <div className="page">
+        <div className="card" style={{ marginBottom: 16 }}>
+          <span className={`activity-badge ${activity.type === 'club' ? 'club' : ''}`} style={{ marginBottom: 12 }}>
+            {activity.type === 'club' ? '跑团活动' : '志愿者活动'}
+          </span>
+          <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>{activity.title}</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 14, color: colors.gray500 }}>
+            <span>📅 {activity.date} {activity.time}</span>
+            <span>📍 {activity.location}</span>
+            <span>⏱ 约 {activity.duration} 小时</span>
+            <span>🏃 {activity.method === 'guide' ? '引导跑步（陪跑绳）' : activity.method === 'walk' ? '陪伴步行' : '跑步+步行均可'}</span>
+          </div>
+        </div>
+
+        <Card style={{ marginBottom: 16 }}>
+          <div className="section-title">组织者</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div className="avatar" style={{ background: activity.type === 'club' ? colors.success : colors.primary }}>
+              {activity.type === 'club' ? '跑' : activity.author[0]}
+            </div>
+            <div>
+              <div style={{ fontWeight: 600 }}>{activity.clubName}</div>
+              <div style={{ fontSize: 13, color: colors.gray500 }}>{activity.author}</div>
+            </div>
+          </div>
+        </Card>
+
+        <Card style={{ marginBottom: 20 }}>
+          <div className="section-title">活动信息</div>
+          <p style={{ fontSize: 14, color: colors.gray700 }}>
+            {activity.type === 'club'
+              ? '这是跑团定期举办的例跑活动，欢迎视障朋友参加。我们有专业的陪跑志愿者，使用陪跑绳确保安全。'
+              : '志愿者发布的个人助跑活动，有丰富的陪跑经验。'}
+          </p>
+        </Card>
+
+        <Button onClick={onSignup} full size="lg">报名参加</Button>
+      </div>
+    </div>
+  )
+}
+
+// Blind Signup Status Screen
+function BlindSignupStatusScreen({ signup, activity, onAdvance, onBack }) {
+  const statusLabels = ['待确认同行', '已确认待出行', '匹配成功待出行', '出行完成']
+  const statusColors = ['badge-pending', 'badge-confirmed', 'badge-success', 'badge-status-3']
+
+  if (!signup) return null
+
+  return (
+    <div className="screen">
+      <Header title="报名状态" onBack={onBack} />
+      <div className="page">
+        <Card style={{ marginTop: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontWeight: 600 }}>{activity?.title || '活动'}</span>
+            <Badge variant={statusColors[signup.status] || 'pending'}>{signup.statusText}</Badge>
+          </div>
+          <p style={{ fontSize: 13, color: colors.gray500, marginTop: 8 }}>
+            {activity?.date} {activity?.time} · {activity?.location}
+          </p>
+        </Card>
+
+        <Card style={{ marginTop: 16 }}>
+          <div className="section-title">状态进度</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
+            {statusLabels.map((label, i) => (
+              <div key={i} style={{ textAlign: 'center', flex: 1 }}>
+                <div style={{
+                  width: 24, height: 24, borderRadius: '50%',
+                  background: i <= signup.status ? colors.primary : colors.gray200,
+                  color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  margin: '0 auto 6px', fontSize: 12
+                }}>
+                  {i + 1}
+                </div>
+                <div style={{ fontSize: 11, color: i <= signup.status ? colors.primary : colors.gray400 }}>{label}</div>
+              </div>
+            ))}
+          </div>
+          {signup.status < 3 ? (
+            <Button onClick={() => onAdvance(signup.id)} full style={{ marginTop: 12 }}>
+              {signup.status === 0 ? '确认已联络' : signup.status === 1 ? '确认出行' : '确认完成'}
+            </Button>
+          ) : (
+            <div style={{ textAlign: 'center', color: colors.success, padding: 12 }}>
+              已完成本次跑步活动
+            </div>
+          )}
+        </Card>
+
+        <Card style={{ marginTop: 16 }}>
+          <div className="section-title">联络信息</div>
+          <p style={{ fontSize: 14, color: colors.gray700, marginBottom: 12 }}>请电话联络志愿者确认出行细节：</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div className="avatar" style={{ background: colors.primary }}>志</div>
+            <div>
+              <div style={{ fontWeight: 600 }}>{signup.volunteerName}</div>
+              <div style={{ fontSize: 13, color: colors.gray500 }}>志愿者</div>
+            </div>
+          </div>
+        </Card>
+
+        <Card style={{ marginTop: 16 }}>
+          <div className="section-title">您的信息</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div className="avatar" style={{ background: colors.warning }}>盲</div>
+            <div>
+              <div style={{ fontWeight: 600 }}>{signup.blindName}</div>
+              <div style={{ fontSize: 13, color: colors.gray500 }}>手机：{signup.blindPhone || '未填写'}</div>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
+// Volunteer Create Activity Screen
+function VolunteerCreateActivityScreen({ onCreate, onBack }) {
+  const [name, setName] = useState('')
+  const [date, setDate] = useState('')
+  const [time, setTime] = useState('07:00')
+  const [location, setLocation] = useState('')
+  const [duration, setDuration] = useState('2')
+  const [method, setMethod] = useState('guide')
+  const [note, setNote] = useState('')
+
+  const handleCreate = () => {
+    if (!name || !date || !time || !location) {
+      return
+    }
+    onCreate({ name, date, time, location, duration, method, note })
+  }
+
+  return (
+    <div className="screen">
+      <Header title="发布活动" onBack={onBack} />
+      <div className="page">
+        <div className="form-group">
+          <label className="form-label">活动名称</label>
+          <input className="form-input" placeholder="例如：周六朝阳公园助盲跑" value={name} onChange={e => setName(e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label className="form-label">日期</label>
+          <input className="form-input" type="date" value={date} onChange={e => setDate(e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label className="form-label">时间</label>
+          <input className="form-input" type="time" value={time} onChange={e => setTime(e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label className="form-label">地点</label>
+          <input className="form-input" placeholder="例如：朝阳公园东门集合" value={location} onChange={e => setLocation(e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label className="form-label">预计时长</label>
+          <select className="form-input form-select" value={duration} onChange={e => setDuration(e.target.value)}>
+            <option value="1">1 小时</option>
+            <option value="2">2 小时</option>
+            <option value="3">3 小时</option>
+            <option value="4">4 小时以上</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label className="form-label">陪伴方式</label>
+          <select className="form-input form-select" value={method} onChange={e => setMethod(e.target.value)}>
+            <option value="guide">引导跑步（陪跑绳）</option>
+            <option value="walk">陪伴步行</option>
+            <option value="both">跑步+步行均可</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label className="form-label">备注</label>
+          <textarea className="form-input" style={{ minHeight: 80 }} placeholder="其他说明（可选）" value={note} onChange={e => setNote(e.target.value)} />
+        </div>
+        <Button onClick={handleCreate} full size="lg">发布活动</Button>
+      </div>
+    </div>
+  )
+}
+
+// Volunteer Signup List Screen
+function VolunteerSignupListScreen({ activity, onConfirm, onBack }) {
+  // Filter signups for this activity
+  const [signups, setSignups] = useState([
+    { id: 101, activityId: 1, blindName: '王明', blindPhone: '136****1111', status: 0, statusText: '待确认' },
+    { id: 102, activityId: 2, blindName: '刘芳', blindPhone: '135****3333', status: 1, statusText: '已确认' },
+  ])
+  const activitySignups = signups.filter(s => s.activityId === activity?.id)
+
+  return (
+    <div className="screen">
+      <Header title="报名列表" onBack={onBack} />
+      <div className="page">
+        <Card style={{ background: '#f0f7ff', border: '1px solid #bfdbfe', marginBottom: 16 }}>
+          <div style={{ fontWeight: 600, marginBottom: 4 }}>{activity?.title}</div>
+          <div style={{ fontSize: 13, color: colors.gray500 }}>{activity?.date} {activity?.time} · {activity?.location}</div>
+        </Card>
+
+        <div className="section-title">报名列表 ({activitySignups.length})</div>
+        {activitySignups.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: 40, color: colors.gray500 }}>暂无报名</div>
+        ) : (
+          activitySignups.map(s => (
+            <Card key={s.id} style={{ marginBottom: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontWeight: 600 }}>{s.blindName}</div>
+                  <div style={{ fontSize: 13, color: colors.gray500 }}>{s.blindPhone}</div>
+                </div>
+                <Badge variant={s.status === 1 ? 'confirmed' : 'pending'}>{s.statusText}</Badge>
+              </div>
+              {s.status === 0 && (
+                <Button size="sm" variant="success" style={{ marginTop: 8 }} onClick={onConfirm}>确认参加</Button>
+              )}
+            </Card>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Club Create Activity Screen
+function ClubCreateActivityScreen({ onCreate, onBack }) {
+  const [name, setName] = useState('')
+  const [date, setDate] = useState('')
+  const [time, setTime] = useState('07:00')
+  const [location, setLocation] = useState('')
+  const [duration, setDuration] = useState('2')
+  const [note, setNote] = useState('')
+
+  const handleCreate = () => {
+    if (!name || !date || !time || !location) {
+      return
+    }
+    onCreate({ name, date, time, location, duration, note })
+  }
+
+  return (
+    <div className="screen">
+      <Header title="发布跑团活动" onBack={onBack} />
+      <div className="page">
+        <div className="form-group">
+          <label className="form-label">活动名称</label>
+          <input className="form-input" placeholder="例如：周六例跑" value={name} onChange={e => setName(e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label className="form-label">日期</label>
+          <input className="form-input" type="date" value={date} onChange={e => setDate(e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label className="form-label">时间</label>
+          <input className="form-input" type="time" value={time} onChange={e => setTime(e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label className="form-label">集合地点</label>
+          <input className="form-input" placeholder="例如：朝阳公园东门" value={location} onChange={e => setLocation(e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label className="form-label">预计时长</label>
+          <select className="form-input form-select" value={duration} onChange={e => setDuration(e.target.value)}>
+            <option value="1">1 小时</option>
+            <option value="2">2 小时</option>
+            <option value="3">3 小时</option>
+            <option value="4">4 小时以上</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label className="form-label">备注</label>
+          <textarea className="form-input" style={{ minHeight: 80 }} placeholder="其他说明（可选）" value={note} onChange={e => setNote(e.target.value)} />
+        </div>
+        <Button onClick={handleCreate} full size="lg">发布活动</Button>
+      </div>
+    </div>
+  )
+}
+
 // ============ MAIN APP ============
 export default function App() {
   const [screen, setScreen] = useState('role')
