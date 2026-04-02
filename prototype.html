@@ -1,0 +1,2736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>助盲跑 - 原型</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #dc2626;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-900);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: white;
+      box-shadow: 0 0 40px rgba(0,0,0,0.1);
+    }
+
+    /* Header */
+    .header {
+      background: var(--primary);
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header h1 { font-size: 18px; font-weight: 600; }
+    .header-back {
+      background: rgba(255,255,255,0.2);
+      border: none color: white;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header-back:hover { background: rgba(255,255,255,0.3); }
+    .header-actions { margin-left: auto; display: flex; gap: 8px; }
+
+    /* Screens */
+    .screen { display: none; padding: 20px; min-height: calc(100vh - 68px); }
+    .screen.active { display: block; }
+
+    /* Role Selection */
+    .role-select { text-align: center; padding-top: 60px; }
+    .role-select h2 { font-size: 24px; margin-bottom: 8px; color: var(--gray-900); }
+    .role-select p { color: var(--gray-500); margin-bottom: 40px; font-size: 14px; }
+    .role-cards { display: flex; flex-direction: column; gap: 16px; }
+    .role-card {
+      border: 2px solid var(--gray-200);
+      border-radius: 16px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+    .role-card:hover { border-color: var(--primary); background: #f0f7ff; }
+    .role-card h3 { font-size: 18px; margin-bottom: 4px; }
+    .role-card p { font-size: 14px; color: var(--gray-500); margin: 0; }
+    .role-card .tag {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+    .role-card .tag.secondary { background: var(--gray-500); }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: var(--gray-100);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab.active { background: white; color: var(--gray-900); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+    /* Activity Cards */
+    .activity-list { display: flex; flex-direction: column; gap: 16px; }
+    .activity-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .activity-card:hover { border-color: var(--primary); box-shadow: 0 2px 8px rgba(37,99,235,0.1); }
+    .activity-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .activity-title { font-weight: 600; font-size: 16px; }
+    .activity-badge {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #dbeafe;
+      color: var(--primary);
+    }
+    .activity-badge.club { background: #dcfce7; color: var(--success); }
+    .activity-meta { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--gray-500); }
+    .activity-meta span { display: flex; align-items: center; gap: 6px; }
+    .activity-footer { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--gray-100); display: flex; justify-content: space-between; align-items: center; }
+    .activity-author { font-size: 13px; color: var(--gray-500); }
+    .activity-signups { font-size: 13px; color: var(--gray-500); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: var(--gray-100); color: var(--gray-700); }
+    .btn-secondary:hover { background: var(--gray-200); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-sm { padding: 8px 16px; font-size: 14px; width: auto; }
+
+    /* Form */
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--gray-700); }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--gray-300);
+      border-radius: 10px;
+      font-size: 15px;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-hint { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      margin-bottom: 16px;
+    }
+    .card-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+
+    /* Dashboard Stats */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat {
+      background: var(--gray-50);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-value { font-size: 24px; font-weight: 700; color: var(--primary); }
+    .stat-label { font-size: 12px; color: var(--gray-500); }
+
+    /* List Items */
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .list-item:last-child { border-bottom: none; }
+    .list-item-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .list-item-content { flex: 1; min-width: 0; }
+    .list-item-title { font-weight: 500; font-size: 15px; }
+    .list-item-sub { font-size: 13px; color: var(--gray-500); }
+    .list-item-action { flex-shrink: 0; }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .badge-pending { background: #fef3c7; color: #92400e; }
+    .badge-confirmed { background: #d1fae5; color: #065f46; }
+    .badge-rejected { background: #fee2e2; color: #991b1b; }
+    .badge-status-0 { background: #e0e7ff; color: #3730a3; }
+    .badge-status-1 { background: #fef3c7; color: #92400e; }
+    .badge-status-2 { background: #d1fae5; color: #065f46; }
+    .badge-status-3 { background: #dcfce7; color: #15803d; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal {
+      background: white;
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      transform: translateY(100%);
+      transition: transform 0.3s;
+    }
+    .modal-overlay.active .modal { transform: translateY(0); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-header h3 { font-size: 18px; }
+    .modal-close {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--gray-100);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--gray-900);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 24px;
+      font-size: 14px;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 200;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      background: white;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      padding: 8px 0;
+      padding-bottom: max(8px, env(safe-area-inset-bottom));
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px;
+      border: none;
+      background: transparent;
+      color: var(--gray-500);
+      font-size: 11px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .nav-item.active { color: var(--primary); }
+    .nav-icon { font-size: 22px; }
+
+    /* Empty State */
+    .empty-state { text-align: center; padding: 60px 20px; }
+    .empty-state .icon { font-size: 64px; margin-bottom: 16px; }
+    .empty-state h3 { font-size: 18px; margin-bottom: 8px; }
+    .empty-state p { color: var(--gray-500); font-size: 14px; }
+
+    /* Section Title */
+    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--gray-700); }
+
+    /* Divider */
+    .divider { height: 8px; background: var(--gray-100); margin: 0 -20px; }
+
+    /* Timeline */
+    .timeline { padding-left: 20px; border-left: 2px solid var(--gray-200); margin-left: 10px; }
+    .timeline-item { padding: 12px 0; position: relative; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -25px;
+      top: 16px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    .timeline-item.completed::before { background: var(--success); }
+    .timeline-item.pending::before { background: var(--warning); }
+
+    /* Status Tags */
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .status-dot.online { background: var(--success); }
+    .status-dot.offline { background: var(--gray-300); }
+
+    /* Registration Flow */
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 0;
+    }
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gray-300);
+      transition: all 0.3s;
+    }
+    .step-dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background: var(--primary);
+    }
+    .step-dot.completed {
+      background: var(--success);
+    }
+
+    .phone-input-group {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .phone-input-group .form-input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .code-input {
+      letter-spacing: 12px;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .code-digit {
+      width: 44px;
+      height: 52px;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .code-digit:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .code-digit.filled {
+      border-color: var(--primary);
+      background: #f0f7ff;
+    }
+
+    .code-input-row {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .code-input-row .btn-sm {
+      padding: 10px 12px;
+      font-size: 13px;
+      height: 52px;
+      flex-shrink: 0;
+    }
+
+    .guide-card {
+      background: linear-gradient(135deg, #f0f7ff 0%, #e0e7ff 100%);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 16px 0;
+      border-left: 4px solid var(--primary);
+    }
+    .guide-card h4 {
+      font-size: 15px;
+      margin-bottom: 12px;
+      color: var(--primary);
+    }
+    .guide-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .guide-card li {
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--gray-700);
+      padding-left: 20px;
+      position: relative;
+    }
+    .guide-card li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--success);
+    }
+
+    .mission-banner {
+      text-align: center;
+      padding: 32px 20px;
+      background: linear-gradient(180deg, var(--gray-50) 0%, transparent 100%);
+    }
+    .mission-icon {
+      font-size: 56px;
+      margin-bottom: 12px;
+    }
+    .mission-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .mission-desc {
+      font-size: 14px;
+      color: var(--gray-500);
+      line-height: 1.6;
+    }
+
+    .checkbox-agree {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 16px 0;
+    }
+    .checkbox-agree.checked {
+      border-color: var(--primary);
+      background: #f0f7ff;
+    }
+    .checkbox-box {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--gray-300);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .checkbox-agree.checked .checkbox-box {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    .checkbox-text {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.5;
+    }
+
+    .audit-banner {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 2px dashed #f59e0b;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .audit-banner.approved {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border-color: #16a34a;
+    }
+    .audit-icon {
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+    .audit-title {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .audit-desc {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+
+    .club-list-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .club-list-item:hover {
+      border-color: var(--primary);
+      background: #f0f7ff;
+    }
+    .club-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--success) 0%, #16a34a 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .club-info {
+      flex: 1;
+    }
+    .club-name {
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .club-meta {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+
+    .gender-select {
+      display: flex;
+      gap: 12px;
+    }
+    .gender-btn {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      background: white;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .gender-btn.active {
+      border-color: var(--primary);
+      background: #f0f7ff;
+      color: var(--primary);
+    }
+
+    .member-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      border: 1px solid var(--gray-200);
+    }
+    .member-card.pending {
+      border-left: 4px solid var(--warning);
+      background: #fffbeb;
+    }
+    .member-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .member-info {
+      flex: 1;
+    }
+    .member-name {
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .member-meta {
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+    .member-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid var(--gray-200);
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .avatar-uploader {
+      border: 2px dashed var(--gray-300);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--gray-50);
+    }
+    .avatar-uploader:hover {
+      border-color: var(--primary);
+    }
+    .avatar-uploader-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    .avatar-uploader-text {
+      font-size: 14px;
+      color: var(--gray-500);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Role Selection Screen -->
+    <div id="screen-role" class="screen active">
+      <div class="role-select">
+        <h2>助盲跑</h2>
+        <p>连接盲人跑者与志愿者/跑团的平台</p>
+        <div class="role-cards">
+          <div class="role-card" onclick="startRegistration('blind')">
+            <span class="tag">盲人用户</span>
+            <h3>我是盲人，想跑步</h3>
+            <p>浏览活动，报名参加，找到志愿者陪伴跑步</p>
+          </div>
+          <div class="role-card" onclick="startRegistration('volunteer')">
+            <span class="tag">志愿者</span>
+            <h3>我想帮助盲人跑步</h3>
+            <p>加入跑团，发布活动，陪伴盲人跑步</p>
+          </div>
+          <div class="role-card" onclick="startRegistration('club')">
+            <span class="tag secondary">跑团管理员</span>
+            <h3>我是跑团组织者</h3>
+            <p>管理跑团成员，发布例跑活动，审核志愿者</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone Login Screen -->
+    <div id="screen-phone-login" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="goBack()">←</button>
+        <h1>验证手机号</h1>
+      </div>
+      <div class="page">
+        <div class="step-indicator" id="phone-login-steps">
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+        </div>
+
+        <div id="phone-step-1">
+          <div class="text-center" style="margin-bottom: 24px;">
+            <h3 style="font-size: 20px; margin-bottom: 8px;">验证手机号</h3>
+            <p class="text-secondary">作为<span id="role-name-display">志愿者</span>登录，请验证手机号</p>
+          </div>
+
+          <div class="form-group">
+            <input type="tel" id="phone-input" class="form-input" placeholder="请输入手机号" maxlength="11">
+          </div>
+          <button class="btn btn-primary btn-full btn-lg" id="send-code-btn" onclick="sendCode()">
+            获取验证码
+          </button>
+        </div>
+
+        <div id="phone-step-2" style="display: none;">
+          <div class="text-center" style="margin-bottom: 24px;">
+            <h3 style="font-size: 20px; margin-bottom: 8px;">输入验证码</h3>
+            <p class="text-secondary">已发送验证码至 <span id="masked-phone"></span></p>
+          </div>
+
+          <div class="form-group">
+            <div class="code-input-row">
+              <input type="text" class="code-digit" maxlength="1" oninput="handleCodeInput(this, 0)" onkeydown="handleCodeKeydown(event, this, 0)">
+              <input type="text" class="code-digit" maxlength="1" oninput="handleCodeInput(this, 1)" onkeydown="handleCodeKeydown(event, this, 1)">
+              <input type="text" class="code-digit" maxlength="1" oninput="handleCodeInput(this, 2)" onkeydown="handleCodeKeydown(event, this, 2)">
+              <input type="text" class="code-digit" maxlength="1" oninput="handleCodeInput(this, 3)" onkeydown="handleCodeKeydown(event, this, 3)">
+              <input type="text" class="code-digit" maxlength="1" oninput="handleCodeInput(this, 4)" onkeydown="handleCodeKeydown(event, this, 4)">
+              <input type="text" class="code-digit" maxlength="1" oninput="handleCodeInput(this, 5)" onkeydown="handleCodeKeydown(event, this, 5)">
+              <button class="btn btn-secondary btn-sm" id="resend-code-btn" onclick="resendCode()">重发</button>
+            </div>
+            <p class="form-hint text-center" style="margin-top: 12px;">演示用验证码：<strong>123456</strong></p>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full btn-lg" style="margin-top: 24px;" id="phone-next-btn" onclick="phoneStep1Next()">
+          下一步
+        </button>
+      </div>
+    </div>
+
+    <!-- Personal Info Screen (Volunteer/Blind) -->
+    <div id="screen-personal-info" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="goBack()">←</button>
+        <h1>填写个人信息</h1>
+      </div>
+      <div class="page">
+        <div class="step-indicator">
+          <div class="step-dot completed"></div>
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+        </div>
+
+        <div class="text-center" style="margin-bottom: 24px;">
+          <h3 style="font-size: 20px; margin-bottom: 8px;">填写个人信息</h3>
+          <p class="text-secondary">帮助我们更好地为您服务</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">姓名 <span style="color: var(--primary);">*</span></label>
+          <input type="text" id="user-name" class="form-input" placeholder="请输入您的姓名">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">性别 <span style="color: var(--primary);">*</span></label>
+          <div class="gender-select">
+            <button class="gender-btn" onclick="selectGender(this, '男')">男</button>
+            <button class="gender-btn" onclick="selectGender(this, '女')">女</button>
+            <button class="gender-btn" onclick="selectGender(this, '其他')">其他</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">跑步经验 <span style="color: var(--primary);">*</span></label>
+          <select id="user-experience" class="form-input form-select">
+            <option value="">请选择您的跑步经验</option>
+            <option value="none">暂无跑步经验</option>
+            <option value="beginner">跑步新手（1年以下）</option>
+            <option value="intermediate">有经验（1-3年）</option>
+            <option value="experienced">经验丰富（3年以上）</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary btn-full btn-lg" style="margin-top: 24px;" onclick="personalInfoNext()">
+          下一步
+        </button>
+      </div>
+    </div>
+
+    <!-- Disability Proof Screen (Blind only) -->
+    <div id="screen-disability-proof" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="goBack()">←</button>
+        <h1>残疾人证明</h1>
+      </div>
+      <div class="page">
+        <div class="step-indicator">
+          <div class="step-dot completed"></div>
+          <div class="step-dot completed"></div>
+          <div class="step-dot active"></div>
+        </div>
+
+        <div class="text-center" style="margin-bottom: 24px;">
+          <div style="font-size: 56px; margin-bottom: 12px;">👁</div>
+          <h3 style="font-size: 20px; margin-bottom: 8px;">残疾人证明</h3>
+          <p class="text-secondary">请确认您是否为视障人士</p>
+        </div>
+
+        <div class="card" style="background: #fffbeb; border: none;">
+          <div class="flex items-center gap-lg" style="margin-bottom: 12px;">
+            <span style="font-size: 28px;">👁</span>
+            <div>
+              <div style="font-weight: 600;">视障人士认证</div>
+              <div style="font-size: 13px; color: var(--gray-500);">平台为视障跑者提供专属服务</div>
+            </div>
+          </div>
+          <ul style="font-size: 14px; color: var(--gray-600); list-style: none; padding: 0;">
+            <li style="padding: 4px 0;">✓ 专属活动推荐与匹配</li>
+            <li style="padding: 4px 0;">✓ 专业志愿者陪伴</li>
+            <li style="padding: 4px 0;">✓ 优先预约陪跑服务</li>
+          </ul>
+        </div>
+
+        <div class="form-group" style="margin-top: 24px;">
+          <label class="form-label">是否持有残疾人证明？</label>
+          <div class="gender-select">
+            <button class="gender-btn" id="has-proof-btn" onclick="selectProof(true)">有证明</button>
+            <button class="gender-btn" id="no-proof-btn" onclick="selectProof(false)">暂无证明</button>
+          </div>
+          <p class="form-hint" id="proof-hint" style="display: none; color: var(--warning); margin-top: 8px;">
+            暂无证明也可使用平台部分功能，但无法享受专属服务
+          </p>
+        </div>
+
+        <button class="btn btn-primary btn-full btn-lg" style="margin-top: 24px;" id="proof-next-btn" onclick="disabilityProofNext()" disabled>
+          下一步
+        </button>
+      </div>
+    </div>
+
+    <!-- Select Club Screen (Volunteer only) -->
+    <div id="screen-select-club" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="goBack()">←</button>
+        <h1>选择跑团</h1>
+      </div>
+      <div class="page">
+        <div class="step-indicator">
+          <div class="step-dot completed"></div>
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+        </div>
+
+        <div class="text-center" style="margin-bottom: 24px;">
+          <div style="font-size: 56px; margin-bottom: 12px;">🏃</div>
+          <h3 style="font-size: 20px; margin-bottom: 8px;">选择要加入的跑团</h3>
+          <p class="text-secondary">加入跑团后可以参与发布和管理活动</p>
+        </div>
+
+        <div class="section-title">可加入的跑团</div>
+        <div id="club-list-container">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Platform Mission Screen -->
+    <div id="screen-platform-mission" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="goBack()">←</button>
+        <h1 id="mission-title">志愿者服务须知</h1>
+      </div>
+      <div class="page">
+        <div class="step-indicator">
+          <div class="step-dot completed"></div>
+          <div class="step-dot completed"></div>
+          <div class="step-dot active"></div>
+        </div>
+
+        <div class="mission-banner">
+          <div class="mission-icon" id="mission-icon">🤝</div>
+          <h2 class="mission-title" id="mission-title-text">志愿者服务须知</h2>
+          <p class="mission-desc" id="mission-desc">
+            感谢您愿意帮助视障朋友跑步。您的每一次陪伴，都让他们感受到社会的温暖。
+          </p>
+        </div>
+
+        <div class="guide-card" id="guide-card">
+          <h4>服务准则</h4>
+          <ul id="guide-list">
+            <li>尊重盲人朋友，保护个人隐私</li>
+            <li>按时参加活动，如有变动请提前通知</li>
+            <li>使用陪跑绳时确保安全</li>
+            <li>活动过程中保持专注，避免使用手机</li>
+            <li>积极反馈活动情况，帮助改进服务</li>
+          </ul>
+        </div>
+
+        <div class="checkbox-agree" id="agree-checkbox" onclick="toggleAgree()">
+          <div class="checkbox-box" id="agree-box">✓</div>
+          <div class="checkbox-text" id="agree-text">
+            我已阅读并同意遵守志愿者服务准则
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full btn-lg" id="mission-next-btn" onclick="missionNext()" disabled>
+          进入首页
+        </button>
+      </div>
+    </div>
+
+    <!-- Club Registration Screen -->
+    <div id="screen-club-register" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="goBack()">←</button>
+        <h1>跑团入驻</h1>
+      </div>
+      <div class="page">
+        <div class="step-indicator" id="club-reg-steps">
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+        </div>
+
+        <div id="club-reg-step-1">
+          <div class="text-center" style="margin-bottom: 24px;">
+            <div style="font-size: 56px; margin-bottom: 12px;">🏃</div>
+            <h3 style="font-size: 20px; margin-bottom: 8px;">跑团信息填写</h3>
+            <p class="text-secondary">请填写跑团基本信息</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">跑团名称 <span style="color: var(--primary);">*</span></label>
+            <input type="text" id="club-name" class="form-input" placeholder="例如：朝阳公园跑团">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">负责人联系方式 <span style="color: var(--primary);">*</span></label>
+            <input type="tel" id="club-contact" class="form-input" placeholder="手机号（用于登录）" maxlength="11">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">跑团所在地 <span style="color: var(--primary);">*</span></label>
+            <input type="text" id="club-location" class="form-input" placeholder="例如：北京朝阳">
+          </div>
+
+          <button class="btn btn-primary btn-full btn-lg" style="margin-top: 24px;" onclick="clubRegStep1Next()">
+            下一步
+          </button>
+        </div>
+
+        <div id="club-reg-step-2" style="display: none;">
+          <div class="mission-banner" style="margin: 0 -20px 24px; padding: 24px;">
+            <div class="mission-icon">🏃</div>
+            <h2 class="mission-title">跑团服务须知</h2>
+            <p class="mission-desc">作为跑团管理员，您将负责审核志愿者、管理跑团活动，确保助盲跑服务的安全与质量。</p>
+          </div>
+
+          <div class="guide-card">
+            <h4>管理员职责</h4>
+            <ul>
+              <li>审核志愿者加入申请</li>
+              <li>发布和管理跑团活动</li>
+              <li>确保活动安全进行</li>
+              <li>处理活动中的问题与投诉</li>
+              <li>维护跑团良好声誉</li>
+            </ul>
+          </div>
+
+          <div class="checkbox-agree" id="club-agree-checkbox" onclick="toggleClubAgree()">
+            <div class="checkbox-box" id="club-agree-box">✓</div>
+            <div class="checkbox-text">我已阅读并同意遵守跑团服务准则</div>
+          </div>
+
+          <button class="btn btn-primary btn-full btn-lg" id="club-reg-next-btn" onclick="clubRegFinish()" disabled>
+            进入跑团首页
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blind User: Home -->
+    <div id="screen-blind-home" class="screen">
+      <div class="header">
+        <h1>助盲跑</h1>
+        <div class="header-actions">
+          <button class="btn btn-sm btn-secondary" onclick="switchRole()">切换</button>
+        </div>
+      </div>
+      <div class="page" style="padding-bottom: 80px;">
+        <!-- 用户信息卡片 -->
+        <div class="card" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); margin-bottom: 20px;">
+          <div class="flex items-center gap-lg">
+            <div class="avatar avatar-lg" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">👁</div>
+            <div style="flex: 1;">
+              <div class="list-item-title" style="font-size: 18px;" id="blind-user-name">欢迎</div>
+              <div class="list-item-sub">视障跑者</div>
+            </div>
+            <span class="badge badge-warning">认证用户</span>
+          </div>
+        </div>
+
+        <!-- 我的报名 -->
+        <div id="blind-my-signups-container">
+          <div class="section-title">我的报名</div>
+          <div id="blind-my-signups">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <div class="divider" style="margin: 20px -20px;"></div>
+
+        <!-- 可参加的活动 -->
+        <div class="section-title">可参加的活动</div>
+        <div id="blind-activity-list">
+          <!-- Activities will be rendered here -->
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item active" onclick="showScreen('screen-blind-home')">
+          <span class="nav-icon">🏠</span>
+          <span>首页</span>
+        </button>
+        <button class="nav-item" onclick="showScreen('screen-blind-my')">
+          <span class="nav-icon">📋</span>
+          <span>我的</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Blind User: My Activities -->
+    <div id="screen-blind-my" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="showScreen('screen-blind-home')">←</button>
+        <h1>我的活动</h1>
+      </div>
+      <div>
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab(this, 'my-upcoming')">即将参加</button>
+          <button class="tab" onclick="switchTab(this, 'my-past')">历史记录</button>
+        </div>
+        <div id="my-upcoming" class="tab-content">
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div class="card-title">周六朝阳公园例跑</div>
+                <p style="font-size: 14px; color: var(--gray-500);">4月5日 07:00 · 朝阳公园东门</p>
+              </div>
+              <span class="badge badge-confirmed">已确认</span>
+            </div>
+            <div style="margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+              <span class="status-dot online"></span>
+              <span style="font-size: 13px;">志愿者「张三」将陪伴您</span>
+            </div>
+          </div>
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div class="card-title">周日奥森长跑</div>
+                <p style="font-size: 14px; color: var(--gray-500);">4月6日 06:30 · 奥森南门</p>
+              </div>
+              <span class="badge badge-pending">待确认</span>
+            </div>
+          </div>
+        </div>
+        <div id="my-past" class="tab-content" style="display: none;">
+          <div class="card">
+            <div class="card-title">上周六朝阳公园例跑</div>
+            <p style="font-size: 14px; color: var(--gray-500);">3月29日 07:00</p>
+            <div style="margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 13px;">志愿者「李四」</span>
+              <span style="color: var(--warning);">★★★★★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item" onclick="showScreen('screen-blind-home')">
+          <span class="nav-icon">🏠</span>
+          <span>首页</span>
+        </button>
+        <button class="nav-item active" onclick="showScreen('screen-blind-my')">
+          <span class="nav-icon">📋</span>
+          <span>我的</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Blind User: Activity Detail -->
+    <div id="screen-blind-activity-detail" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="showScreen('screen-blind-home')">←</button>
+        <h1>活动详情</h1>
+      </div>
+      <div style="padding: 0 20px 80px;" id="blind-activity-detail-content">
+        <!-- Dynamic content -->
+      </div>
+    </div>
+
+    <!-- Blind User: Signup Status -->
+    <div id="screen-blind-signup-status" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="showScreen('screen-blind-home')">←</button>
+        <h1>报名状态</h1>
+      </div>
+      <div style="padding: 0 20px 80px;" id="blind-signup-status-content">
+        <!-- Dynamic content -->
+      </div>
+    </div>
+
+    <!-- Volunteer: Home -->
+    <div id="screen-volunteer-home" class="screen">
+      <div class="header">
+        <h1>助盲跑</h1>
+        <div class="header-actions">
+          <button class="btn btn-sm btn-secondary" onclick="switchRole()">切换</button>
+        </div>
+      </div>
+      <div class="page" style="padding-bottom: 80px;">
+        <!-- 审核状态提示 -->
+        <div id="volunteer-audit-pending" style="display: none;">
+          <div class="audit-banner">
+            <div class="audit-icon">⏳</div>
+            <div class="audit-title">等待跑团审核中</div>
+            <div class="audit-desc">您的加入申请已提交，请等待 <strong id="applied-club-name"></strong> 审核。<br>审核通过后即可发布活动。</div>
+          </div>
+        </div>
+
+        <div id="volunteer-audit-approved" style="display: none;">
+          <div class="audit-banner approved">
+            <div class="audit-icon">✅</div>
+            <div class="audit-title">审核已通过</div>
+            <div class="audit-desc">您可以发布助跑活动了</div>
+          </div>
+        </div>
+
+        <div id="volunteer-no-club" style="display: none;">
+          <div class="card" style="border: 2px dashed var(--gray-300); background: var(--gray-50); text-align: center; padding: 40px 20px;">
+            <div style="font-size: 48px; margin-bottom: 16px;">🏃</div>
+            <h3 style="margin-bottom: 8px;">您还未加入跑团</h3>
+            <p style="font-size: 14px; color: var(--gray-500); margin-bottom: 20px;">加入跑团后才能发布助跑活动</p>
+            <button class="btn btn-primary" onclick="showScreen('screen-select-club')">加入跑团</button>
+          </div>
+        </div>
+
+        <div id="volunteer-with-club" style="display: none;">
+          <div class="card">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+              <div class="list-item-avatar" style="background: var(--success);">跑</div>
+              <div>
+                <div class="list-item-title" id="my-club-name">朝阳公园跑团</div>
+                <div class="list-item-sub">已入驻 · 志愿者</div>
+              </div>
+            </div>
+            <button class="btn btn-secondary" onclick="showScreen('screen-volunteer-my-club')">查看跑团</button>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-value" id="volunteer-activity-count">0</div>
+              <div class="stat-label">发布活动</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="volunteer-hours">0</div>
+              <div class="stat-label">陪伴时长(h)</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">4.9</div>
+              <div class="stat-label">评分</div>
+            </div>
+          </div>
+
+          <div class="section-title">我的活动</div>
+          <div id="volunteer-my-activities">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <button class="btn btn-primary btn-full" style="margin-top: 16px;" id="publish-activity-btn" onclick="showScreen('screen-volunteer-create-activity')">
+            + 发布新活动
+          </button>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item active" onclick="showScreen('screen-volunteer-home')">
+          <span class="nav-icon">🏠</span>
+          <span>首页</span>
+        </button>
+        <button class="nav-item" onclick="showScreen('screen-volunteer-my')">
+          <span class="nav-icon">📋</span>
+          <span>我的</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Volunteer: My -->
+    <div id="screen-volunteer-my" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="showScreen('screen-volunteer-home')">←</button>
+        <h1>我的</h1>
+      </div>
+      <div style="padding: 0 20px 80px;">
+        <div class="card">
+          <div class="list-item" style="border: none; padding: 0;">
+            <div class="list-item-avatar">志</div>
+            <div class="list-item-content">
+              <div class="list-item-title">志愿者用户</div>
+              <div class="list-item-sub">138****8888</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="list-item" style="cursor: pointer;" onclick="showScreen('screen-volunteer-my-club')">
+            <div style="font-size: 20px;">🏃</div>
+            <div class="list-item-content">
+              <div class="list-item-title">朝阳公园跑团</div>
+              <div class="list-item-sub">志愿者</div>
+            </div>
+            <span style="color: var(--gray-500);">›</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="list-item" style="cursor: pointer;">
+            <div style="font-size: 20px;">⭐</div>
+            <div class="list-item-content">
+              <div class="list-item-title">我的积分</div>
+              <div class="list-item-sub">共 1280 积分，资深志愿者</div>
+            </div>
+            <span style="color: var(--gray-500);">›</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="list-item" style="cursor: pointer;">
+            <div style="font-size: 20px;">📊</div>
+            <div class="list-item-content">
+              <div class="list-item-title">活动记录</div>
+              <div class="list-item-sub">已完成 12 次活动</div>
+            </div>
+            <span style="color: var(--gray-500);">›</span>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item" onclick="showScreen('screen-volunteer-home')">
+          <span class="nav-icon">🏠</span>
+          <span>首页</span>
+        </button>
+        <button class="nav-item active" onclick="showScreen('screen-volunteer-my')">
+          <span class="nav-icon">📋</span>
+          <span>我的</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Volunteer: Join Club -->
+    <div id="screen-volunteer-join-club" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="showScreen('screen-volunteer-home')">←</button>
+        <h1>加入跑团</h1>
+      </div>
+      <div style="padding: 0 20px 80px;">
+        <div class="section-title">选择要加入的跑团</div>
+        <div id="club-list">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Volunteer: My Club -->
+    <div id="screen-volunteer-my-club" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="showScreen('screen-volunteer-home')">←</button>
+        <h1>朝阳公园跑团</h1>
+      </div>
+      <div style="padding: 0 20px 80px;">
+        <div class="card" style="text-align: center; padding: 30px;">
+          <div class="list-item-avatar" style="width: 72px; height: 72px; font-size: 32px; margin: 0 auto 16px; background: var(--success);">跑</div>
+          <h3 style="margin-bottom: 4px;">朝阳公园跑团</h3>
+          <p style="font-size: 14px; color: var(--gray-500); margin-bottom: 16px;">北京朝阳區 · 128 名成员</p>
+          <div style="display: flex; justify-content: center; gap: 24px; font-size: 14px; color: var(--gray-500);">
+            <span>例跑活动 36 期</span>
+            <span>已帮助 89 人次</span>
+          </div>
+        </div>
+
+        <div class="section-title">跑团活动</div>
+        <div class="activity-list" id="club-activities">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item" onclick="showScreen('screen-volunteer-home')">
+          <span class="nav-icon">🏠</span>
+          <span>首页</span>
+        </button>
+        <button class="nav-item" onclick="showScreen('screen-volunteer-my')">
+          <span class="nav-icon">📋</span>
+          <span>我的</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Volunteer: Create Activity -->
+    <div id="screen-volunteer-create-activity" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="showScreen('screen-volunteer-home')">←</button>
+        <h1>发布活动</h1>
+      </div>
+      <div style="padding: 0 20px 80px;">
+        <div class="form-group">
+          <label>活动名称</label>
+          <input type="text" id="activity-name" placeholder="例如：周六朝阳公园助盲跑">
+        </div>
+        <div class="form-group">
+          <label>日期</label>
+          <input type="date" id="activity-date">
+        </div>
+        <div class="form-group">
+          <label>时间</label>
+          <input type="time" id="activity-time" value="07:00">
+        </div>
+        <div class="form-group">
+          <label>地点</label>
+          <input type="text" id="activity-location" placeholder="例如：朝阳公园东门集合">
+        </div>
+        <div class="form-group">
+          <label>预计时长</label>
+          <select id="activity-duration">
+            <option value="1">1 小时</option>
+            <option value="2" selected>2 小时</option>
+            <option value="3">3 小时</option>
+            <option value="4">4 小时以上</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>陪伴方式</label>
+          <select id="activity-method">
+            <option value="guide">引导跑步（陪跑绳）</option>
+            <option value="walk">陪伴步行</option>
+            <option value="both">跑步+步行均可</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>备注</label>
+          <textarea id="activity-note" placeholder="其他说明（可选）"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="createActivity()">发布活动</button>
+      </div>
+    </div>
+
+    <!-- Volunteer: Activity Signups -->
+    <div id="screen-volunteer-signups" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="showScreen('screen-volunteer-home')">←</button>
+        <h1>报名列表</h1>
+      </div>
+      <div style="padding: 0 20px 80px;">
+        <div class="card" style="background: #f0f7ff; border: 1px solid #bfdbfe;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div class="card-title" id="signup-activity-title">周六朝阳公园助盲跑</div>
+              <p style="font-size: 13px; color: var(--gray-500);">4月5日 07:00 · 已有 2 人报名</p>
+            </div>
+            <button class="btn btn-sm btn-primary" onclick="showToast('已发送提醒')">发送提醒</button>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top: 20px;">待确认 (2)</div>
+        <div id="signup-pending-list">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <div class="section-title" style="margin-top: 20px;">已确认 (1)</div>
+        <div class="card">
+          <div class="list-item" style="border: none; padding: 0;">
+            <div class="list-item-avatar">盲</div>
+            <div class="list-item-content">
+              <div class="list-item-title">王明</div>
+              <div class="list-item-sub">加入跑团 3 个月 · 参加 5 次活动</div>
+            </div>
+            <span class="badge badge-confirmed">已确认</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Club Admin: Home -->
+    <div id="screen-club-home" class="screen">
+      <div class="header">
+        <h1 id="club-home-title">跑团管理</h1>
+        <div class="header-actions">
+          <button class="btn btn-sm btn-secondary" onclick="switchRole()">切换</button>
+        </div>
+      </div>
+      <div class="page" style="padding-bottom: 80px;">
+        <!-- 跑团信息卡片 -->
+        <div class="card" style="background: linear-gradient(135deg, #f0f7ff 0%, #e0e7ff 100%); margin-bottom: 20px;">
+          <div class="flex items-center gap-lg">
+            <div class="avatar avatar-lg" style="background: linear-gradient(135deg, var(--success) 0%, #16a34a 100%);">🏃</div>
+            <div style="flex: 1;">
+              <div class="list-item-title" style="font-size: 18px;" id="club-display-name">我的跑团</div>
+              <div class="list-item-sub">跑团管理员</div>
+              <div class="flex gap-lg" style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">
+                <span id="club-member-count">0 名成员</span>
+                <span id="club-pending-count">0 待审核</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 统计 -->
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-value" id="club-total-activities">0</div>
+            <div class="stat-label">发布活动</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="club-total-helped">0</div>
+            <div class="stat-label">帮助人次</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">4.8</div>
+            <div class="stat-label">评分</div>
+          </div>
+        </div>
+
+        <!-- 标签页 -->
+        <div class="tabs">
+          <button class="tab active" onclick="switchClubTab(this, 'club-activities-tab')">活动管理</button>
+          <button class="tab" onclick="switchClubTab(this, 'club-members-tab')">成员管理</button>
+        </div>
+
+        <div id="club-activities-tab" class="tab-content active">
+          <div class="flex justify-between items-center" style="margin-bottom: 12px;">
+            <div class="section-title" style="margin-bottom: 0;">跑团活动</div>
+            <button class="btn btn-sm btn-primary" onclick="showScreen('screen-club-create-activity')">+ 发布</button>
+          </div>
+          <div id="club-admin-activities">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <div id="club-members-tab" class="tab-content">
+          <!-- 待审核 -->
+          <div class="section-title">待审核 (<span id="pending-count-display">0</span>)</div>
+          <div id="club-pending-members">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- 已入驻 -->
+          <div class="section-title" style="margin-top: 20px;">已入驻成员 (<span id="joined-count-display">0</span>)</div>
+          <div id="club-confirmed-members">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item active" onclick="showScreen('screen-club-home')">
+          <span class="nav-icon">🏠</span>
+          <span>首页</span>
+        </button>
+        <button class="nav-item" onclick="showScreen('screen-club-my')">
+          <span class="nav-icon">⚙</span>
+          <span>设置</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Club Admin: My -->
+    <div id="screen-club-my" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="showScreen('screen-club-home')">←</button>
+        <h1>跑团设置</h1>
+      </div>
+      <div style="padding: 0 20px 80px;">
+        <div class="card">
+          <div class="list-item" style="border: none; padding: 0;">
+            <div class="list-item-avatar" style="background: var(--success);">跑</div>
+            <div class="list-item-content">
+              <div class="list-item-title">朝阳公园跑团</div>
+              <div class="list-item-sub">管理员</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="list-item" style="cursor: pointer;">
+            <div style="font-size: 20px;">📊</div>
+            <div class="list-item-content">
+              <div class="list-item-title">跑团数据</div>
+              <div class="list-item-sub">已发布 36 期活动，帮助 89 人次</div>
+            </div>
+            <span style="color: var(--gray-500);">›</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="list-item" style="cursor: pointer;">
+            <div style="font-size: 20px;">⚙️</div>
+            <div class="list-item-content">
+              <div class="list-item-title">基本设置</div>
+              <div class="list-item-sub">跑团名称、简介、地点</div>
+            </div>
+            <span style="color: var(--gray-500);">›</span>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item" onclick="showScreen('screen-club-home')">
+          <span class="nav-icon">🏠</span>
+          <span>首页</span>
+        </button>
+        <button class="nav-item active" onclick="showScreen('screen-club-my')">
+          <span class="nav-icon">📋</span>
+          <span>我的</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Club Admin: Create Activity -->
+    <div id="screen-club-create-activity" class="screen">
+      <div class="header">
+        <button class="header-back" onclick="showScreen('screen-club-home')">←</button>
+        <h1>发布例跑活动</h1>
+      </div>
+      <div style="padding: 0 20px 80px;">
+        <div class="form-group">
+          <label>活动名称</label>
+          <input type="text" id="club-activity-name" placeholder="例如：周六朝阳公园例跑">
+        </div>
+        <div class="form-group">
+          <label>日期</label>
+          <input type="date" id="club-activity-date">
+        </div>
+        <div class="form-group">
+          <label>时间</label>
+          <input type="time" id="club-activity-time" value="07:00">
+        </div>
+        <div class="form-group">
+          <label>地点</label>
+          <input type="text" id="club-activity-location" placeholder="例如：朝阳公园东门">
+        </div>
+        <div class="form-group">
+          <label>活动类型</label>
+          <select id="club-activity-type">
+            <option value="regular">例跑活动</option>
+            <option value="special">特殊活动</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>预计时长</label>
+          <select id="club-activity-duration">
+            <option value="1">1 小时</option>
+            <option value="2" selected>2 小时</option>
+            <option value="3">3 小时</option>
+            <option value="4">4 小时以上</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>备注</label>
+          <textarea id="club-activity-note" placeholder="其他说明（可选）"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="createClubActivity()">发布活动</button>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 id="modal-title">标题</h3>
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div id="modal-content">
+          <!-- Dynamic content -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">提示</div>
+  </div>
+
+  <script>
+    // =====================
+    // App State
+    // =====================
+    let currentRole = null;
+    let currentUser = null;
+    let currentScreen = 'screen-role';
+    let screenHistory = ['screen-role'];
+
+    // 用户数据
+    let userData = {
+      phone: '',
+      name: '',
+      gender: '',
+      experience: '',
+      hasDisabilityProof: null,
+      agreedToTerms: false,
+      joinedClub: null,
+      auditStatus: 'pending', // 'pending' | 'approved'
+    };
+
+    // 跑团数据
+    let clubData = {
+      name: '',
+      contact: '',
+      location: '',
+      agreed: false,
+    };
+
+    // 跑团成员申请（志愿者申请加入跑团）
+    let clubApplications = [
+      { id: 1, name: '李明', phone: '138****1234', applyTime: '2026-04-01', experience: '有半年跑步经验' },
+      { id: 2, name: '王芳', phone: '139****5678', applyTime: '2026-04-02', experience: '刚开始跑步' },
+    ];
+
+    // 跑团已入驻成员
+    let clubMembers = [
+      { id: 3, name: '张三', joinTime: '2025-01-15', phone: '137****2222', activities: 12, hours: 28 },
+      { id: 4, name: '李四', joinTime: '2025-03-20', phone: '138****4444', activities: 8, hours: 16 },
+      { id: 5, name: '赵六', joinTime: '2025-06-01', phone: '139****6666', activities: 5, hours: 10 },
+    ];
+
+    // 可注册的跑团列表
+    const availableClubs = [
+      { id: 1, name: '朝阳公园跑团', location: '北京朝阳', members: 128 },
+      { id: 2, name: '奥森跑团', location: '北京海淀', members: 95 },
+      { id: 3, name: '通州跑步协会', location: '北京通州', members: 67 },
+    ];
+
+    // 活动数据
+    let activities = [
+      {
+        id: 1,
+        title: '周六朝阳公园例跑',
+        date: '2026-04-05',
+        time: '07:00',
+        location: '朝阳公园东门',
+        duration: '2',
+        method: 'guide',
+        type: 'club',
+        clubName: '朝阳公园跑团',
+        author: '跑团管理员',
+        authorPhone: '139****1234',
+        signups: 3,
+        confirmed: 1,
+        status: 'upcoming'
+      },
+      {
+        id: 2,
+        title: '周日奥森长跑训练',
+        date: '2026-04-06',
+        time: '06:30',
+        location: '奥森南门',
+        duration: '3',
+        method: 'both',
+        type: 'club',
+        clubName: '奥森跑团',
+        author: '跑团管理员',
+        authorPhone: '138****5678',
+        signups: 2,
+        confirmed: 0,
+        status: 'upcoming'
+      },
+      {
+        id: 3,
+        title: '周三晚间陪伴步行',
+        date: '2026-04-09',
+        time: '19:00',
+        location: '朝阳公园西门',
+        duration: '1',
+        method: 'walk',
+        type: 'volunteer',
+        clubName: '朝阳公园跑团',
+        author: '张三',
+        authorPhone: '137****8888',
+        signups: 1,
+        confirmed: 0,
+        status: 'upcoming'
+      },
+    ];
+
+    // 盲人报名记录
+    let blindSignups = [
+      {
+        id: 101,
+        activityId: 1,
+        blindName: '王明',
+        blindPhone: '136****1111',
+        volunteerName: '张三',
+        volunteerPhone: '137****2222',
+        status: 0,
+        statusText: '待确认同行'
+      },
+      {
+        id: 102,
+        activityId: 2,
+        blindName: '刘芳',
+        blindPhone: '135****3333',
+        volunteerName: '李四',
+        volunteerPhone: '138****4444',
+        status: 1,
+        statusText: '已确认待出行'
+      },
+    ];
+
+    let currentActivityId = null;
+    let currentSignupId = null;
+
+    // =====================
+    // Navigation
+    // =====================
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+      currentScreen = screenId;
+
+      // Refresh data on screen show
+      if (screenId === 'screen-blind-home') renderBlindActivities();
+      if (screenId === 'screen-volunteer-home') renderVolunteerHome();
+      if (screenId === 'screen-select-club') renderClubList();
+      if (screenId === 'screen-volunteer-my-club') renderClubActivities();
+      if (screenId === 'screen-club-home') renderClubAdminHome();
+      if (screenId === 'screen-blind-signup-status') renderBlindSignupStatus();
+      if (screenId === 'screen-club-create-activity') initCreateActivityForm();
+    }
+
+    function goBack() {
+      if (screenHistory.length > 1) {
+        screenHistory.pop();
+        showScreen(screenHistory[screenHistory.length - 1]);
+      }
+    }
+
+    function startRegistration(role) {
+      currentRole = role;
+      userData = {
+        phone: '',
+        name: '',
+        gender: '',
+        experience: '',
+        hasDisabilityProof: null,
+        agreedToTerms: false,
+        joinedClub: null,
+        auditStatus: 'pending',
+      };
+
+      // 更新角色名称显示
+      const roleNames = { blind: '盲人', volunteer: '志愿者', club: '跑团' };
+      document.getElementById('role-name-display').textContent = roleNames[role];
+
+      screenHistory = ['screen-role', 'screen-phone-login'];
+      showScreen('screen-phone-login');
+    }
+
+    function switchRole() {
+      currentRole = null;
+      userData = {};
+      screenHistory = ['screen-role'];
+      showScreen('screen-role');
+    }
+
+    // =====================
+    // Registration Flow
+    // =====================
+    let phoneStep = 1;
+    let codeCountdown = 0;
+    let codeTimer = null;
+
+    function sendCode() {
+      const phone = document.getElementById('phone-input').value;
+      if (phone.length !== 11) {
+        showToast('请输入正确的手机号');
+        return;
+      }
+      userData.phone = phone;
+
+      codeCountdown = 60;
+      const btn = document.getElementById('send-code-btn');
+      btn.disabled = true;
+      btn.textContent = codeCountdown + 's';
+
+      if (codeTimer) clearInterval(codeTimer);
+      codeTimer = setInterval(() => {
+        codeCountdown--;
+        const resendBtn = document.getElementById('resend-code-btn');
+        if (codeCountdown <= 0) {
+          clearInterval(codeTimer);
+          btn.disabled = false;
+          btn.textContent = '获取验证码';
+          if (resendBtn) {
+            resendBtn.disabled = false;
+            resendBtn.textContent = '重发';
+          }
+        } else {
+          btn.textContent = codeCountdown + 's';
+          if (resendBtn) {
+            resendBtn.disabled = true;
+            resendBtn.textContent = codeCountdown + 's';
+          }
+        }
+      }, 1000);
+
+      // 切换到步骤2
+      phoneStep = 2;
+      document.getElementById('phone-step-1').style.display = 'none';
+      document.getElementById('phone-step-2').style.display = 'block';
+      document.getElementById('masked-phone').textContent = phone.slice(0, 3) + '****' + phone.slice(-4);
+
+      // 清空并聚焦第一个验证码输入框
+      document.querySelectorAll('.code-digit').forEach(d => { d.value = ''; d.classList.remove('filled'); });
+      document.querySelector('.code-digit').focus();
+      document.getElementById('phone-login-steps').innerHTML = `
+        <div class="step-dot completed"></div>
+        <div class="step-dot active"></div>
+      `;
+      document.getElementById('phone-next-btn').textContent = '验证并登录';
+      document.getElementById('phone-next-btn').onclick = verifyCode;
+
+      // 模拟发送成功
+      showToast('验证码已发送');
+    }
+
+    function phoneStep1Next() {
+      // 兼容原来的"下一步"按钮（用于从step2验证）
+      verifyCode();
+    }
+
+    function resendCode() {
+      if (codeCountdown > 0) return;
+      sendCode();
+    }
+
+    function handleCodeInput(input, index) {
+      const digits = document.querySelectorAll('.code-digit');
+      const value = input.value;
+
+      // 只允许数字
+      input.value = value.replace(/\D/g, '');
+
+      if (input.value && index < 5) {
+        digits[index + 1].focus();
+      }
+
+      // 更新 filled 状态
+      input.classList.toggle('filled', input.value !== '');
+
+      // 检查是否填满
+      const code = Array.from(digits).map(d => d.value).join('');
+      if (code.length === 6) {
+        verifyCode(code);
+      }
+    }
+
+    function handleCodeKeydown(event, input, index) {
+      const digits = document.querySelectorAll('.code-digit');
+
+      if (event.key === 'Backspace' && !input.value && index > 0) {
+        digits[index - 1].focus();
+      } else if (event.key === 'ArrowLeft' && index > 0) {
+        digits[index - 1].focus();
+      } else if (event.key === 'ArrowRight' && index < 5) {
+        digits[index + 1].focus();
+      }
+    }
+
+    function verifyCode(code) {
+      if (!code) {
+        const digits = document.querySelectorAll('.code-digit');
+        code = Array.from(digits).map(d => d.value).join('');
+      }
+
+      if (code.length !== 6) {
+        showToast('请输入6位验证码');
+        return;
+      }
+
+      // 固定验证码 123456（演示用）
+      if (code !== '123456') {
+        showToast('验证码错误，请输入 123456');
+        return;
+      }
+
+      // 模拟验证成功，进入下一步
+      if (currentRole === 'blind') {
+        screenHistory.push('screen-personal-info');
+        showScreen('screen-personal-info');
+      } else if (currentRole === 'volunteer') {
+        screenHistory.push('screen-personal-info');
+        showScreen('screen-personal-info');
+      } else if (currentRole === 'club') {
+        screenHistory.push('screen-club-register');
+        showScreen('screen-club-register');
+      }
+      phoneStep = 1;
+    }
+
+    function selectGender(btn, gender) {
+      document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      userData.gender = gender;
+    }
+
+    function personalInfoNext() {
+      const name = document.getElementById('user-name').value;
+      const experience = document.getElementById('user-experience').value;
+
+      if (!name) {
+        showToast('请输入姓名');
+        return;
+      }
+      if (!userData.gender) {
+        showToast('请选择性别');
+        return;
+      }
+      if (!experience) {
+        showToast('请选择跑步经验');
+        return;
+      }
+
+      userData.name = name;
+      userData.experience = experience;
+
+      if (currentRole === 'blind') {
+        screenHistory.push('screen-disability-proof');
+        showScreen('screen-disability-proof');
+      } else if (currentRole === 'volunteer') {
+        screenHistory.push('screen-select-club');
+        showScreen('screen-select-club');
+      }
+    }
+
+    function selectProof(hasProof) {
+      userData.hasDisabilityProof = hasProof;
+      document.getElementById('has-proof-btn').classList.toggle('active', hasProof);
+      document.getElementById('no-proof-btn').classList.toggle('active', !hasProof);
+      document.getElementById('proof-hint').style.display = hasProof ? 'none' : 'block';
+      document.getElementById('proof-next-btn').disabled = false;
+    }
+
+    function disabilityProofNext() {
+      screenHistory.push('screen-platform-mission');
+      showScreen('screen-platform-mission');
+      initMissionScreen('blind');
+    }
+
+    function renderClubList() {
+      const container = document.getElementById('club-list-container');
+      container.innerHTML = availableClubs.map(club => `
+        <div class="club-list-item" onclick="selectClub(${club.id})">
+          <div class="club-avatar">🏃</div>
+          <div class="club-info">
+            <div class="club-name">${club.name}</div>
+            <div class="club-meta">${club.location} · ${club.members} 名成员</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectClub(clubId) {
+      const club = availableClubs.find(c => c.id === clubId);
+      if (club) {
+        userData.joinedClub = club;
+        screenHistory.push('screen-platform-mission');
+        showScreen('screen-platform-mission');
+        initMissionScreen('volunteer');
+      }
+    }
+
+    function initMissionScreen(role) {
+      const missionTitle = document.getElementById('mission-title');
+      const missionIcon = document.getElementById('mission-icon');
+      const missionTitleText = document.getElementById('mission-title-text');
+      const missionDesc = document.getElementById('mission-desc');
+      const guideList = document.getElementById('guide-list');
+      const agreeText = document.getElementById('agree-text');
+
+      if (role === 'volunteer') {
+        missionTitle.textContent = '志愿者服务须知';
+        missionIcon.textContent = '🤝';
+        missionTitleText.textContent = '志愿者服务须知';
+        missionDesc.textContent = '感谢您愿意帮助视障朋友跑步。您的每一次陪伴，都让他们感受到社会的温暖。';
+        guideList.innerHTML = `
+          <li>尊重盲人朋友，保护个人隐私</li>
+          <li>按时参加活动，如有变动请提前通知</li>
+          <li>使用陪跑绳时确保安全</li>
+          <li>活动过程中保持专注，避免使用手机</li>
+          <li>积极反馈活动情况，帮助改进服务</li>
+        `;
+        agreeText.textContent = '我已阅读并同意遵守志愿者服务准则';
+      } else {
+        missionTitle.textContent = '盲人服务须知';
+        missionIcon.textContent = '👁';
+        missionTitleText.textContent = '盲人跑步服务须知';
+        missionDesc.textContent = '我们致力于为视障跑者提供安全、温暖的跑步体验。每位志愿者都经过跑团审核，确保您的安全。';
+        guideList.innerHTML = `
+          <li>活动前请确认集合地点和时间</li>
+          <li>如有特殊需求请提前告知志愿者</li>
+          <li>活动过程中注意安全，听从志愿者引导</li>
+          <li>如需取消请提前通知</li>
+          <li>活动结束后可对志愿者进行评价</li>
+        `;
+        agreeText.textContent = '我已阅读并同意遵守服务须知';
+      }
+
+      document.getElementById('agree-checkbox').classList.remove('checked');
+      document.getElementById('mission-next-btn').disabled = true;
+      userData.agreedToTerms = false;
+    }
+
+    function toggleAgree() {
+      const checkbox = document.getElementById('agree-checkbox');
+      const isChecked = checkbox.classList.toggle('checked');
+      userData.agreedToTerms = isChecked;
+      document.getElementById('mission-next-btn').disabled = !isChecked;
+    }
+
+    function missionNext() {
+      // 完成注册，进入对应首页
+      if (currentRole === 'volunteer') {
+        screenHistory = ['screen-volunteer-home'];
+        showScreen('screen-volunteer-home');
+        renderVolunteerHome();
+      } else if (currentRole === 'blind') {
+        screenHistory = ['screen-blind-home'];
+        showScreen('screen-blind-home');
+        renderBlindActivities();
+      }
+    }
+
+    // =====================
+    // Club Registration
+    // =====================
+    let clubRegStep = 1;
+
+    function clubRegStep1Next() {
+      const name = document.getElementById('club-name').value;
+      const contact = document.getElementById('club-contact').value;
+      const location = document.getElementById('club-location').value;
+
+      if (!name) {
+        showToast('请输入跑团名称');
+        return;
+      }
+      if (!contact || contact.length !== 11) {
+        showToast('请输入正确的手机号');
+        return;
+      }
+      if (!location) {
+        showToast('请输入跑团所在地');
+        return;
+      }
+
+      clubData.name = name;
+      clubData.contact = contact;
+      clubData.location = location;
+
+      clubRegStep = 2;
+      document.getElementById('club-reg-step-1').style.display = 'none';
+      document.getElementById('club-reg-step-2').style.display = 'block';
+      document.getElementById('club-reg-steps').innerHTML = `
+        <div class="step-dot completed"></div>
+        <div class="step-dot active"></div>
+      `;
+    }
+
+    function toggleClubAgree() {
+      const checkbox = document.getElementById('club-agree-checkbox');
+      const isChecked = checkbox.classList.toggle('checked');
+      clubData.agreed = isChecked;
+      document.getElementById('club-reg-next-btn').disabled = !isChecked;
+    }
+
+    function clubRegFinish() {
+      // 完成注册，进入跑团首页
+      screenHistory = ['screen-club-home'];
+      showScreen('screen-club-home');
+      renderClubAdminHome();
+    }
+
+    // =====================
+    // Volunteer Home
+    // =====================
+    function renderVolunteerHome() {
+      document.getElementById('blind-user-name').textContent = userData.name || '欢迎';
+
+      // 根据用户状态显示不同内容
+      const hasClub = userData.joinedClub !== null;
+      const isApproved = userData.auditStatus === 'approved';
+
+      document.getElementById('volunteer-audit-pending').style.display = hasClub && !isApproved ? 'block' : 'none';
+      document.getElementById('volunteer-audit-approved').style.display = isApproved ? 'block' : 'none';
+      document.getElementById('volunteer-no-club').style.display = !hasClub ? 'block' : 'none';
+      document.getElementById('volunteer-with-club').style.display = hasClub ? 'block' : 'none';
+
+      if (hasClub) {
+        document.getElementById('applied-club-name').textContent = userData.joinedClub.name;
+        document.getElementById('my-club-name').textContent = userData.joinedClub.name;
+
+        // 统计我的活动
+        const myActivities = activities.filter(a => a.type === 'volunteer' && a.author === userData.name);
+        document.getElementById('volunteer-activity-count').textContent = myActivities.length;
+        document.getElementById('volunteer-hours').textContent = myActivities.reduce((sum, a) => sum + parseInt(a.duration), 0);
+
+        // 渲染我的活动
+        renderVolunteerActivities();
+      }
+
+      // 更新发布按钮状态
+      document.getElementById('publish-activity-btn').disabled = !isApproved;
+      if (!isApproved) {
+        document.getElementById('publish-activity-btn').style.opacity = '0.5';
+      } else {
+        document.getElementById('publish-activity-btn').style.opacity = '1';
+      }
+    }
+
+    function renderVolunteerActivities() {
+      const myActivities = activities.filter(a => a.type === 'volunteer' && a.author === userData.name);
+      const container = document.getElementById('volunteer-my-activities');
+
+      if (myActivities.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">🏃</div>
+            <h3>暂无活动</h3>
+            <p>发布您的第一个助跑活动吧</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = myActivities.map(a => `
+        <div class="activity-card" onclick="showSignupList(${a.id})">
+          <div class="activity-header">
+            <div class="activity-title">${a.title}</div>
+            <span class="badge ${a.confirmed > 0 ? 'badge-success' : 'badge-pending'}">${a.confirmed > 0 ? a.confirmed + '人已确认' : '待确认'}</span>
+          </div>
+          <div class="activity-meta">
+            <span>📅 ${a.date} ${a.time}</span>
+            <span>📍 ${a.location}</span>
+          </div>
+          <div class="activity-footer">
+            <span>${a.signups} 人报名</span>
+            <span style="color: var(--primary);">查看详情 ›</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 模拟审核通过（演示用）
+    function simulateApprove() {
+      userData.auditStatus = 'approved';
+      showToast('已模拟审核通过');
+      renderVolunteerHome();
+    }
+
+    // =====================
+    // Blind User
+    // =====================
+    function renderBlindActivities() {
+      // 更新用户名
+      document.getElementById('blind-user-name').textContent = userData.name || '欢迎';
+
+      // 渲染我的报名
+      const signupListEl = document.getElementById('blind-my-signups');
+      const statusColors = ['badge-pending', 'badge-confirmed', 'badge-success', 'badge-status-3'];
+
+      if (blindSignups.length === 0) {
+        document.getElementById('blind-my-signups-container').style.display = 'none';
+      } else {
+        document.getElementById('blind-my-signups-container').style.display = 'block';
+        signupListEl.innerHTML = blindSignups.map(s => {
+          const activity = activities.find(a => a.id === s.activityId);
+          if (!activity) return '';
+          return `
+            <div class="card" onclick="showBlindSignupStatus(${s.id})" style="cursor: pointer; margin-bottom: 10px; border-left: 4px solid var(--primary);">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-weight: 600;">${activity.title}</div>
+                  <p style="font-size: 13px; color: var(--gray-500);">${activity.date} ${activity.time}</p>
+                </div>
+                <span class="badge ${statusColors[s.status] || 'badge-pending'}">${s.statusText}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 渲染可参加的活动
+      const list = document.getElementById('blind-activity-list');
+      list.innerHTML = activities.map(a => `
+        <div class="activity-card" onclick="showBlindActivityDetail(${a.id})">
+          <div class="activity-header">
+            <span class="activity-title">${a.title}</span>
+            <span class="activity-badge ${a.type === 'club' ? 'club' : ''}">${a.type === 'club' ? '跑团' : '志愿者'}</span>
+          </div>
+          <div class="activity-meta">
+            <span>📅 ${a.date} ${a.time}</span>
+            <span>📍 ${a.location}</span>
+            <span>⏱ 约 ${a.duration} 小时 · ${a.method === 'guide' ? '引导跑步' : a.method === 'walk' ? '陪伴步行' : '均可'}</span>
+          </div>
+          <div class="activity-footer">
+            <span>${a.clubName} · ${a.author}</span>
+            <span style="color: var(--primary);">点击报名 ›</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function showBlindSignupStatus(signupId) {
+      currentSignupId = signupId;
+      showScreen('screen-blind-signup-status');
+    }
+
+    function showBlindActivityDetail(id) {
+      const activity = activities.find(a => a.id === id);
+      if (!activity) return;
+      currentActivityId = id;
+
+      const content = document.getElementById('blind-activity-detail-content');
+      content.innerHTML = `
+        <div class="card" style="margin: 0 -20px 16px; border-radius: 0; padding: 20px;">
+          <span class="activity-badge ${activity.type === 'club' ? 'club' : ''}" style="margin-bottom: 12px;">${activity.type === 'club' ? '跑团活动' : '志愿者活动'}</span>
+          <h2 style="font-size: 20px; margin-bottom: 16px;">${activity.title}</h2>
+          <div class="activity-meta" style="gap: 12px;">
+            <span>📅 ${activity.date} ${activity.time}</span>
+            <span>📍 ${activity.location}</span>
+            <span>⏱ 约 ${activity.duration} 小时</span>
+            <span>🏃 ${activity.method === 'guide' ? '引导跑步（陪跑绳）' : activity.method === 'walk' ? '陪伴步行' : '跑步+步行均可'}</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">组织者</div>
+          <div class="list-item" style="border: none; padding: 0;">
+            <div class="list-item-avatar">${activity.type === 'club' ? '跑' : activity.author[0]}</div>
+            <div class="list-item-content">
+              <div class="list-item-title">${activity.clubName}</div>
+              <div class="list-item-sub">${activity.author}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">活动信息</div>
+          <p style="font-size: 14px; color: var(--gray-700);">
+            ${activity.type === 'club' ? '这是跑团定期举办的例跑活动，欢迎视障朋友参加。我们有专业的陪跑志愿者，使用陪跑绳确保安全。' : '志愿者发布的个人助跑活动，有丰富的陪跑经验。'}
+          </p>
+        </div>
+
+        <div style="padding: 0 20px 20px; margin-top: 20px;">
+          <button class="btn btn-primary" onclick="signupActivity()">报名参加</button>
+        </div>
+      `;
+      showScreen('screen-blind-activity-detail');
+    }
+
+    function signupActivity() {
+      const activity = activities.find(a => a.id === currentActivityId);
+      const newSignup = {
+        id: Date.now(),
+        activityId: activity.id,
+        blindName: userData.name || '我',
+        blindPhone: userData.phone || '',
+        volunteerName: activity.author,
+        volunteerPhone: activity.authorPhone || '',
+        status: 0,
+        statusText: '待确认同行'
+      };
+      blindSignups.push(newSignup);
+      activity.signups++;
+      currentSignupId = newSignup.id;
+      showToast('报名成功！');
+      showScreen('screen-blind-signup-status');
+    }
+
+    function renderBlindSignupStatus() {
+      const content = document.getElementById('blind-signup-status-content');
+      const signup = blindSignups.find(s => s.id === currentSignupId);
+      const activity = activities.find(a => a.id === signup.activityId);
+
+      const statusLabels = ['待确认同行', '已确认待出行', '匹配成功待出行', '出行完成'];
+      const statusColors = ['badge-pending', 'badge-confirmed', 'badge-success', 'badge-status-3'];
+
+      content.innerHTML = `
+        <div class="card" style="margin-top: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="activity-title">${activity.title}</span>
+            <span class="badge ${statusColors[signup.status] || 'badge-pending'}">${signup.statusText}</span>
+          </div>
+          <p style="font-size: 13px; color: var(--gray-500); margin-top: 8px;">${activity.date} ${activity.time} · ${activity.location}</p>
+        </div>
+
+        <div class="card">
+          <div class="section-title">状态进度</div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+            ${statusLabels.map((label, i) => `
+              <div style="text-align: center; flex: 1; position: relative;">
+                <div style="width: 24px; height: 24px; border-radius: 50%; background: ${i <= signup.status ? 'var(--primary)' : 'var(--gray-200)'}; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 12px;">${i + 1}</div>
+                <div style="font-size: 11px; color: ${i <= signup.status ? 'var(--primary)' : 'var(--gray-400)'};">${label}</div>
+              </div>
+            `).join('')}
+          </div>
+          ${signup.status < 3 ? `
+            <button class="btn btn-primary" style="margin-top: 12px;" onclick="advanceSignupStatus(${signup.id})">
+              ${signup.status === 0 ? '确认已联络' : signup.status === 1 ? '确认出行' : '确认完成'}
+            </button>
+          ` : '<div style="text-align: center; color: var(--success); padding: 12px;">已完成本次跑步活动</div>'}
+        </div>
+
+        <div class="card">
+          <div class="section-title">联络信息</div>
+          <p style="font-size: 14px; color: var(--gray-700); margin-bottom: 12px;">请电话联络志愿者确认出行细节：</p>
+          <div class="list-item" style="border: none; padding: 0;">
+            <div class="list-item-avatar">志</div>
+            <div class="list-item-content">
+              <div class="list-item-title">${signup.volunteerName}</div>
+              <div class="list-item-sub">志愿者</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">您的信息</div>
+          <div class="list-item" style="border: none; padding: 0;">
+            <div class="list-item-avatar" style="background: var(--warning);">盲</div>
+            <div class="list-item-content">
+              <div class="list-item-title">${signup.blindName}</div>
+              <div class="list-item-sub">手机：${signup.blindPhone || '未填写'}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function advanceSignupStatus(signupId) {
+      const signup = blindSignups.find(s => s.id === signupId);
+      if (signup && signup.status < 3) {
+        signup.status++;
+        signup.statusText = ['待确认同行', '已确认待出行', '匹配成功待出行', '出行完成'][signup.status];
+        showToast('状态已更新');
+        renderBlindSignupStatus();
+      }
+    }
+
+    // =====================
+    // Volunteer
+    // =====================
+    function renderClubActivities() {
+      const clubActs = activities.filter(a => a.type === 'club');
+      const list = document.getElementById('club-activities');
+
+      if (clubActs.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">📅</div>
+            <h3>暂无活动</h3>
+            <p>跑团还没有发布活动</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = clubActs.map(a => `
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div class="card-title">${a.title}</div>
+              <p style="font-size: 13px; color: var(--gray-500);">${a.date} ${a.time} · ${a.location}</p>
+            </div>
+            <span class="badge badge-confirmed">${a.confirmed}/${a.signups}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function createActivity() {
+      const name = document.getElementById('activity-name').value;
+      const date = document.getElementById('activity-date').value;
+      const time = document.getElementById('activity-time').value;
+      const location = document.getElementById('activity-location').value;
+      const duration = document.getElementById('activity-duration').value;
+      const method = document.getElementById('activity-method').value;
+
+      if (!name || !date || !location) {
+        showToast('请填写完整信息');
+        return;
+      }
+
+      const newActivity = {
+        id: Date.now(),
+        title: name,
+        date: date,
+        time: time,
+        location: location,
+        duration: duration,
+        method: method,
+        type: 'volunteer',
+        clubName: userData.joinedClub?.name || '个人',
+        author: userData.name || '我',
+        authorPhone: '',
+        signups: 0,
+        confirmed: 0,
+        status: 'upcoming'
+      };
+
+      activities.unshift(newActivity);
+      showToast('活动发布成功！');
+      screenHistory.pop();
+      showScreen('screen-volunteer-home');
+    }
+
+    function showSignupList(id) {
+      const activity = activities.find(a => a.id === id);
+      currentActivityId = id;
+
+      document.getElementById('signup-activity-title').textContent = activity.title;
+
+      const pendingList = document.getElementById('signup-pending-list');
+      pendingList.innerHTML = `
+        <div class="card">
+          <div class="list-item" style="border: none; padding: 0;">
+            <div class="list-item-avatar">盲</div>
+            <div class="list-item-content">
+              <div class="list-item-title">王明</div>
+              <div class="list-item-sub">申请参加 · 2小时前</div>
+            </div>
+            <button class="btn btn-sm btn-success" onclick="confirmSignup(this)">确认</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="list-item" style="border: none; padding: 0;">
+            <div class="list-item-avatar">盲</div>
+            <div class="list-item-content">
+              <div class="list-item-title">刘芳</div>
+              <div class="list-item-sub">申请参加 · 5小时前</div>
+            </div>
+            <button class="btn btn-sm btn-success" onclick="confirmSignup(this)">确认</button>
+          </div>
+        </div>
+      `;
+      showScreen('screen-volunteer-signups');
+    }
+
+    function confirmSignup(btn) {
+      btn.textContent = '已确认';
+      btn.disabled = true;
+      btn.style.background = 'var(--gray-300)';
+      showToast('已确认参加');
+    }
+
+    // =====================
+    // Club Admin
+    // =====================
+    function renderClubAdminHome() {
+      // 更新跑团信息
+      document.getElementById('club-display-name').textContent = clubData.name || '我的跑团';
+      document.getElementById('club-home-title').textContent = clubData.name || '跑团管理';
+
+      // 更新统计
+      const clubActivities = activities.filter(a => a.type === 'club');
+      document.getElementById('club-total-activities').textContent = clubActivities.length;
+      document.getElementById('club-total-helped').textContent = clubActivities.reduce((sum, a) => sum + a.signups, 0);
+
+      // 更新成员计数
+      document.getElementById('club-member-count').textContent = clubMembers.length + ' 名成员';
+      document.getElementById('club-pending-count').textContent = clubApplications.length + ' 待审核';
+      document.getElementById('pending-count-display').textContent = clubApplications.length;
+      document.getElementById('joined-count-display').textContent = clubMembers.length;
+
+      renderClubAdminActivities();
+      renderClubPendingMembers();
+      renderClubConfirmedMembers();
+    }
+
+    function switchClubTab(tabBtn, tabId) {
+      tabBtn.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tabBtn.classList.add('active');
+      document.getElementById('club-activities-tab').classList.remove('active');
+      document.getElementById('club-members-tab').classList.remove('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function renderClubAdminActivities() {
+      const clubActivities = activities.filter(a => a.type === 'club');
+      const list = document.getElementById('club-admin-activities');
+
+      if (clubActivities.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">📅</div>
+            <h3>暂无活动</h3>
+            <p>发布第一期跑团例跑吧</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = clubActivities.map(a => `
+        <div class="activity-card">
+          <div class="activity-header">
+            <div class="activity-title">${a.title}</div>
+            <span class="badge badge-success">${a.confirmed}/${a.signups} 已确认</span>
+          </div>
+          <div class="activity-meta">
+            <span>📅 ${a.date} ${a.time}</span>
+            <span>📍 ${a.location}</span>
+          </div>
+          <div class="activity-footer">
+            <span>报名管理</span>
+            <span style="color: var(--primary);">查看 ›</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderClubPendingMembers() {
+      const list = document.getElementById('club-pending-members');
+
+      if (clubApplications.length === 0) {
+        list.innerHTML = `
+          <div class="card text-center" style="padding: 24px; color: var(--gray-500);">
+            暂无待审核成员
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = clubApplications.map(m => `
+        <div class="member-card pending">
+          <div class="member-avatar">${m.name[0]}</div>
+          <div class="member-info">
+            <div class="member-name">${m.name}</div>
+            <div class="member-meta">${m.phone} · 申请于 ${m.applyTime}</div>
+            <div style="font-size: 12px; color: var(--gray-400); margin-top: 2px;">跑步经验：${m.experience}</div>
+          </div>
+          <div class="member-actions">
+            <button class="btn btn-sm btn-success" onclick="approveMember(${m.id})">通过</button>
+            <button class="btn btn-sm btn-danger" onclick="rejectMember(${m.id})">拒绝</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderClubConfirmedMembers() {
+      const list = document.getElementById('club-confirmed-members');
+
+      if (clubMembers.length === 0) {
+        list.innerHTML = `
+          <div class="card text-center" style="padding: 24px; color: var(--gray-500);">
+            暂无已入驻成员
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = clubMembers.map(m => `
+        <div class="member-card">
+          <div class="member-avatar">${m.name[0]}</div>
+          <div class="member-info">
+            <div class="member-name">${m.name}</div>
+            <div class="member-meta">加入于 ${m.joinTime}</div>
+          </div>
+          <div style="text-align: right; font-size: 12px; color: var(--gray-500);">
+            <div>${m.activities} 次活动</div>
+            <div>${m.hours} 小时</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function approveMember(id) {
+      const member = clubApplications.find(m => m.id === id);
+      if (member) {
+        clubApplications = clubApplications.filter(m => m.id !== id);
+        clubMembers.unshift({
+          ...member,
+          joinTime: new Date().toISOString().split('T')[0],
+          activities: 0,
+          hours: 0
+        });
+        showToast('已通过审核');
+        renderClubAdminHome();
+      }
+    }
+
+    function rejectMember(id) {
+      clubApplications = clubApplications.filter(m => m.id !== id);
+      showToast('已拒绝');
+      renderClubAdminHome();
+    }
+
+    function initCreateActivityForm() {
+      const today = new Date();
+      const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+      const formatDate = d => d.toISOString().split('T')[0];
+      document.getElementById('club-activity-date').value = formatDate(nextWeek);
+    }
+
+    function createClubActivity() {
+      const name = document.getElementById('club-activity-name').value;
+      const date = document.getElementById('club-activity-date').value;
+      const time = document.getElementById('club-activity-time').value;
+      const location = document.getElementById('club-activity-location').value;
+      const duration = document.getElementById('club-activity-duration').value;
+
+      if (!name || !date || !location) {
+        showToast('请填写完整信息');
+        return;
+      }
+
+      const newActivity = {
+        id: Date.now(),
+        title: name,
+        date: date,
+        time: time,
+        location: location,
+        duration: duration,
+        method: 'guide',
+        type: 'club',
+        clubName: clubData.name || '我的跑团',
+        author: '跑团管理员',
+        signups: 0,
+        confirmed: 0,
+        status: 'upcoming'
+      };
+
+      activities.unshift(newActivity);
+      showToast('活动发布成功！');
+      screenHistory.pop(); // 返回上一页
+      showScreen('screen-club-home');
+    }
+
+    function showActivitySignupList(id) {
+      currentActivityId = id;
+      const activity = activities.find(a => a.id === id);
+      document.getElementById('signup-activity-title').textContent = activity.title;
+
+      const pendingList = document.getElementById('signup-pending-list');
+      pendingList.innerHTML = `
+        <div class="card">
+          <div class="list-item" style="border: none; padding: 0;">
+            <div class="list-item-avatar">盲</div>
+            <div class="list-item-content">
+              <div class="list-item-title">王明</div>
+              <div class="list-item-sub">申请参加 · 2小时前</div>
+            </div>
+            <button class="btn btn-sm btn-success" onclick="confirmSignup(this)">确认</button>
+          </div>
+        </div>
+      `;
+      showScreen('screen-volunteer-signups');
+    }
+
+    // =====================
+    // Modal & Toast
+    // =====================
+    function showModal(title, content) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-content').innerHTML = content;
+      document.getElementById('modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // =====================
+    // Init
+    // =====================
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set default dates
+      const today = new Date();
+      const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+      const formatDate = d => d.toISOString().split('T')[0];
+
+      // 只设置活动创建页面的日期
+      const activityDateInput = document.getElementById('activity-date');
+      if (activityDateInput) {
+        activityDateInput.value = formatDate(nextWeek);
+      }
+
+      const clubActivityDateInput = document.getElementById('club-activity-date');
+      if (clubActivityDateInput) {
+        clubActivityDateInput.value = formatDate(nextWeek);
+      }
+    });
+  </script>
+</body>
+</html>

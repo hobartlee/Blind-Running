@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/lihaodong/**)",
+      "Bash(sed $d)",
+      "Bash(node --check /tmp/prototype.js)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(lsof -ti:5173)",
+      "Bash(xargs kill:*)",
+      "Bash(open prototype.html)",
+      "Bash(node --check prototype.html)",
+      "Bash(node -e ':*)"
+    ],
+    "additionalDirectories": [
+      "/Users/lihaodong/Desktop/超脑/docs/specs"
+    ]
+  }
+}
