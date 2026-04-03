@@ -27,7 +27,11 @@
       "Bash(git commit:*)",
       "Bash(curl -s localhost:5174)",
       "Bash(lsof -ti:5173,5174)",
-      "Bash(curl -s localhost:5173)"
+      "Bash(curl -s localhost:5173)",
+      "Bash(pkill -f \"vite\")",
+      "Bash(lsof -i:5173)",
+      "Bash(curl -s 'https://phtdbrofflmgsorrwgnu.supabase.co/rest/v1/clubs?select=*' -H 'apikey: sb_publishable_xgRIvKaLs-IKVp3GUCNiNg_f_U-uOa4' -H 'Authorization: Bearer sb_publishable_xgRIvKaLs-IKVp3GUCNiNg_f_U-uOa4')",
+      "Bash(curl -s 'https://phtdbrofflmgsorrwgnu.supabase.co/rest/v1/activities?select=*' -H 'apikey: sb_publishable_xgRIvKaLs-IKVp3GUCNiNg_f_U-uOa4' -H 'Authorization: Bearer sb_publishable_xgRIvKaLs-IKVp3GUCNiNg_f_U-uOa4')"
     ],
     "additionalDirectories": [
       "/Users/lihaodong/Desktop/超脑/docs/specs"
