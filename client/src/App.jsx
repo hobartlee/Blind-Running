@@ -796,10 +796,40 @@ function BlindHomeScreen({ userData, activities, signups, onSwitchRole, onViewDe
 }
 
 // Volunteer Home Screen
-function VolunteerHomeScreen({ userData, activities, onSwitchRole, onSimulateApprove, onCreateActivity, onViewSignups, onMyProfile, onShowToast }) {
+function VolunteerHomeScreen({ userData, activities, signups, onSwitchRole, onSimulateApprove, onCreateActivity, onViewSignups, onMyProfile, onShowToast, onCancelActivity }) {
   const hasClub = !!userData.joinedClub
   const isApproved = userData.auditStatus === 'approved'
   const myActivities = activities.filter(a => a.type === 'volunteer')
+  const [activityFilter, setActivityFilter] = useState('all')
+
+  // 根据报名状态计算活动状态
+  const getActivityStatus = (activity) => {
+    if (activity.status === 'cancelled') return 'cancelled'
+    if (activity.status === 'completed') return 'completed'
+    const activitySignups = signups.filter(s => s.activityId === activity.id)
+    if (activitySignups.length === 0) return 'upcoming'
+    const allCompleted = activitySignups.every(s => s.status === 3)
+    if (allCompleted) return 'completed'
+    const hasMatched = activitySignups.some(s => s.status === 2)
+    // 检查是否过期：已过活动日期时间且有匹配成功的报名
+    if (hasMatched) {
+      const now = new Date()
+      const activityDateTime = new Date(`${activity.date} ${activity.time.split('-')[0]}`)
+      if (now > activityDateTime) return 'completed'
+      return 'matched'
+    }
+    return 'pending'
+  }
+
+  const filteredActivities = myActivities.filter(a => {
+    const status = getActivityStatus(a)
+    if (activityFilter === 'all') return true
+    if (activityFilter === 'in_progress') {
+      return status === 'pending' || status === 'matched' || status === 'upcoming'
+    }
+    if (activityFilter === 'completed') return status === 'completed'
+    return true
+  })
 
   return (
     <div className="screen active">
@@ -861,30 +891,57 @@ function VolunteerHomeScreen({ userData, activities, onSwitchRole, onSimulateApp
         {hasClub && isApproved && (
           <>
             <div className="section-title">我的活动</div>
-            {myActivities.length === 0 ? (
+            <div className="tabs" style={{ marginBottom: 16 }}>
+              <button className={`tab ${activityFilter === 'all' ? 'active' : ''}`} onClick={() => setActivityFilter('all')}>全部</button>
+              <button className={`tab ${activityFilter === 'in_progress' ? 'active' : ''}`} onClick={() => setActivityFilter('in_progress')}>进行中</button>
+              <button className={`tab ${activityFilter === 'completed' ? 'active' : ''}`} onClick={() => setActivityFilter('completed')}>已完成</button>
+            </div>
+            {filteredActivities.length === 0 ? (
               <EmptyState
                 title="暂无活动"
-                description="还没有发布任何活动"
+                description={activityFilter === 'all' ? '还没有发布任何活动' : activityFilter === 'in_progress' ? '没有进行中的活动' : '没有已完成的活动'}
               />
             ) : (
-              myActivities.map(a => (
-                <Card
-                  key={a.id}
-                  interactive={isApproved}
-                  onClick={isApproved ? () => onViewSignups(a) : undefined}
-                  aria-label={`活动：${a.title}，${a.date}，${a.location}`}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>{a.title}</div>
-                      <p style={{ fontSize: 13, color: colors.gray500 }}>{a.date} {a.time} · {a.location}</p>
+              filteredActivities.map(a => {
+                const actStatus = getActivityStatus(a)
+                const signupCount = signups.filter(s => s.activityId === a.id).length
+                return (
+                  <Card
+                    key={a.id}
+                    interactive={isApproved && actStatus !== 'cancelled'}
+                    onClick={isApproved && actStatus !== 'cancelled' ? () => onViewSignups(a) : undefined}
+                    aria-label={`活动：${a.title}，${a.date}，${a.location}`}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <div style={{ fontWeight: 600 }}>{a.title}</div>
+                        <p style={{ fontSize: 13, color: colors.gray500 }}>{a.date} {a.time} · {a.location}</p>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {actStatus === 'cancelled' ? (
+                          <Badge variant="danger">已取消</Badge>
+                        ) : actStatus === 'completed' ? (
+                          <Badge variant="confirmed">已完成</Badge>
+                        ) : actStatus === 'matched' ? (
+                          <Badge variant="success">匹配成功</Badge>
+                        ) : signupCount > 0 ? (
+                          <Badge variant="pending">{signupCount}人待确认</Badge>
+                        ) : (
+                          <Badge variant="pending">待报名</Badge>
+                        )}
+                      </div>
                     </div>
-                    <Badge variant={a.confirmed > 0 ? 'confirmed' : 'pending'}>
-                      {a.confirmed > 0 ? `${a.confirmed}人已确认` : '待确认'}
-                    </Badge>
-                  </div>
-                </Card>
-              ))
+                    {isApproved && actStatus !== 'cancelled' && actStatus !== 'completed' && (
+                      <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${colors.gray200}`, display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button size="sm" variant="secondary" onClick={(e) => { e.stopPropagation(); onShowToast?.('请电话联络对方后取消活动'); onCancelActivity(a.id) }}>取消活动</Button>
+                      </div>
+                    )}
+                    {actStatus === 'cancelled' && (
+                      <div style={{ marginTop: 8, fontSize: 12, color: colors.danger }}>已取消，请电话联络对方</div>
+                    )}
+                  </Card>
+                )
+              })
             )}
             {/* 只有一个发布活动按钮 */}
             {isApproved ? (
@@ -1346,10 +1403,15 @@ function VolunteerCreateActivityScreen({ onCreate, onBack }) {
     const start = startTime.split(':').map(Number)
     const end = endTime.split(':').map(Number)
     const duration = (end[0] * 60 + end[1] - start[0] * 60 - start[1]) / 60
+    // 生成标题：3月4日活动
+    const dateObj = new Date(date)
+    const month = dateObj.getMonth() + 1
+    const day = dateObj.getDate()
+    const title = `${month}月${day}日活动`
     onCreate({
-      name: `${date.slice(5)} ${startTime}-${endTime}`,
+      name: title,
       date,
-      time: startTime,
+      time: `${startTime}-${endTime}`,
       location,
       duration: String(Math.max(1, Math.round(duration))),
       method: 'both',
@@ -1411,11 +1473,8 @@ function VolunteerCreateActivityScreen({ onCreate, onBack }) {
 }
 
 // Volunteer Signup List Screen
-function VolunteerSignupListScreen({ activity, onConfirm, onBack }) {
-  const activitySignups = [
-    { id: 101, activityId: 1, blindName: '王明', blindPhone: '136****1111', status: 0, statusText: '待确认' },
-    { id: 102, activityId: 2, blindName: '刘芳', blindPhone: '135****3333', status: 1, statusText: '已确认' },
-  ].filter(s => s.activityId === activity?.id)
+function VolunteerSignupListScreen({ activity, signups, onConfirm, onBack }) {
+  const activitySignups = signups.filter(s => s.activityId === activity?.id)
 
   return (
     <div className="screen active">
@@ -1443,7 +1502,7 @@ function VolunteerSignupListScreen({ activity, onConfirm, onBack }) {
                     {s.blindPhone}
                   </div>
                 </div>
-                <Badge variant={s.status === 1 ? 'confirmed' : 'pending'}>{s.statusText}</Badge>
+                <Badge variant={s.status === 1 ? 'confirmed' : s.status === 2 ? 'success' : s.status === 3 ? 'confirmed' : 'pending'}>{s.statusText}</Badge>
               </div>
               {s.status === 0 && (
                 <Button size="sm" variant="success" style={{ marginTop: 8 }} onClick={onConfirm} ariaLabel={`确认 ${s.blindName} 参加`}>
@@ -1696,6 +1755,16 @@ export default function App() {
     showToast('状态已更新')
   }
 
+  const handleCancelActivity = (activityId) => {
+    setActivities(prev => prev.map(a => {
+      if (a.id === activityId) {
+        return { ...a, status: 'cancelled' }
+      }
+      return a
+    }))
+    showToast('活动已取消')
+  }
+
   const handleCreateVolunteerActivity = (data) => {
     const newActivity = {
       id: Date.now(),
@@ -1843,6 +1912,8 @@ export default function App() {
           onViewSignups={handleViewSignups}
           onMyProfile={() => goTo('my-profile')}
           onShowToast={showToast}
+          signups={signups}
+          onCancelActivity={handleCancelActivity}
         />
       )}
 
@@ -1856,6 +1927,7 @@ export default function App() {
       {screen === 'volunteer-signups' && (
         <VolunteerSignupListScreen
           activity={currentActivity}
+          signups={signups}
           onConfirm={() => showToast('已确认参加')}
           onBack={() => goTo('volunteer-home')}
         />
