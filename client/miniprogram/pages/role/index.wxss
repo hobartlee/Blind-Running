@@ -1,0 +1,346 @@
+/* ===== 页面容器 ===== */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FFF9F5 0%, #FFF5F0 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== 背景装饰 ===== */
+.bg-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.bg-circle-1 {
+  width: 500rpx;
+  height: 500rpx;
+  background: linear-gradient(135deg, #FFE4D6 0%, #FFDDD0 100%);
+  top: -200rpx;
+  right: -150rpx;
+}
+
+.bg-circle-2 {
+  width: 300rpx;
+  height: 300rpx;
+  background: linear-gradient(135deg, #E8F4FF 0%, #D6EDFF 100%);
+  top: 400rpx;
+  left: -100rpx;
+}
+
+.bg-circle-3 {
+  width: 200rpx;
+  height: 200rpx;
+  background: linear-gradient(135deg, #FFF0E8 0%, #FFE4D6 100%);
+  bottom: 200rpx;
+  right: -50rpx;
+}
+
+/* ===== 顶部英雄区域 ===== */
+.hero {
+  padding: 100rpx 60rpx 40rpx;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 12rpx 32rpx;
+  background: linear-gradient(135deg, #FF8C69 0%, #FF6B5B 100%);
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 600;
+  border-radius: 100rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 91, 0.3);
+}
+
+.hero-title {
+  font-size: 52rpx;
+  font-weight: 800;
+  color: #2D2D2D;
+  line-height: 1.3;
+  margin-bottom: 16rpx;
+}
+
+.highlight {
+  display: inline;
+  background: linear-gradient(135deg, #FF8C69 0%, #FF6B5B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 28rpx;
+  color: #8C8C8C;
+  line-height: 1.6;
+}
+
+/* ===== 角色选择区域 ===== */
+.role-section {
+  padding: 32rpx 40rpx 0;
+  position: relative;
+  z-index: 1;
+}
+
+.role-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #8C8C8C;
+  text-align: center;
+  margin-bottom: 24rpx;
+  letter-spacing: 4rpx;
+}
+
+.role-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* ===== 角色卡片 ===== */
+.role-card {
+  position: relative;
+  border-radius: 24rpx;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.role-card:active {
+  transform: scale(0.98);
+}
+
+.role-card-inner {
+  display: flex;
+  align-items: center;
+  padding: 28rpx;
+  background: #fff;
+  position: relative;
+  z-index: 2;
+}
+
+.role-card-decoration {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6rpx;
+}
+
+/* 盲人卡片 */
+.role-blind .role-card-decoration {
+  background: linear-gradient(180deg, #FFB399 0%, #FF9A7A 100%);
+}
+
+.role-blind .role-icon-bg {
+  background: linear-gradient(135deg, #FFF0E8 0%, #FFE4D6 100%);
+}
+
+.role-blind .icon-eye {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  border: 4rpx solid #FF6B5B;
+  position: relative;
+}
+
+.role-blind .icon-eye::after {
+  content: '';
+  position: absolute;
+  width: 18rpx;
+  height: 18rpx;
+  background: #FF6B5B;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 志愿者卡片 */
+.role-volunteer .role-card-decoration {
+  background: linear-gradient(180deg, #7ED4AD 0%, #5DC697 100%);
+}
+
+.role-volunteer .role-icon-bg {
+  background: linear-gradient(135deg, #E8F8F0 0%, #D4F0E5 100%);
+}
+
+.role-volunteer .icon-run {
+  width: 44rpx;
+  height: 44rpx;
+  position: relative;
+}
+
+.role-volunteer .icon-run::before {
+  content: '';
+  position: absolute;
+  width: 8rpx;
+  height: 28rpx;
+  background: #07C160;
+  border-radius: 4rpx;
+  left: 8rpx;
+  top: 0;
+  transform: rotate(-15deg);
+}
+
+.role-volunteer .icon-run::after {
+  content: '';
+  position: absolute;
+  width: 24rpx;
+  height: 8rpx;
+  background: #07C160;
+  border-radius: 4rpx;
+  bottom: 4rpx;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* 跑团卡片 */
+.role-group .role-card-decoration {
+  background: linear-gradient(180deg, #7EB5FF 0%, #5B9EFF 100%);
+}
+
+.role-group .role-icon-bg {
+  background: linear-gradient(135deg, #E8F4FF 0%, #D6EDFF 100%);
+}
+
+.role-group .icon-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44rpx;
+  height: 44rpx;
+  position: relative;
+}
+
+.role-group .icon-group::before,
+.role-group .icon-group::after {
+  content: '';
+  position: absolute;
+  width: 16rpx;
+  height: 16rpx;
+  background: #4A90FF;
+  border-radius: 50%;
+  bottom: 4rpx;
+}
+
+.role-group .icon-group::before {
+  left: 4rpx;
+}
+
+.role-group .icon-group::after {
+  right: 4rpx;
+}
+
+.role-group .icon-group-inner {
+  width: 20rpx;
+  height: 20rpx;
+  background: #4A90FF;
+  border-radius: 50%;
+  position: absolute;
+  top: 2rpx;
+}
+
+/* 卡片图标 */
+.role-icon-wrap {
+  position: relative;
+  width: 80rpx;
+  height: 80rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.role-icon-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 20rpx;
+}
+
+.role-icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 卡片内容 */
+.role-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+  position: relative;
+}
+
+.role-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+}
+
+.role-desc {
+  font-size: 24rpx;
+  color: #8C8C8C;
+}
+
+.role-arrow {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32rpx;
+  color: #D0D0D0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.role-card:active .role-arrow {
+  transform: translateY(-50%) translateX(4rpx);
+  color: #FF6B5B;
+}
+
+/* 卡片点击时的阴影效果 */
+.role-blind:active {
+  box-shadow: 0 8rpx 32rpx rgba(255, 107, 91, 0.2);
+}
+
+.role-volunteer:active {
+  box-shadow: 0 8rpx 32rpx rgba(7, 193, 96, 0.2);
+}
+
+.role-group:active {
+  box-shadow: 0 8rpx 32rpx rgba(74, 144, 255, 0.2);
+}
+
+/* ===== 底部 ===== */
+.footer {
+  padding: 48rpx 40rpx 60rpx;
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 24rpx;
+  color: #B0B0B0;
+}
+
+.highlight-text {
+  color: #FF6B5B;
+  font-weight: 700;
+}

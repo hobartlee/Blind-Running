@@ -1,0 +1,83 @@
+<view class="page">
+  <!-- 背景装饰 -->
+  <view class="bg-decoration">
+    <view class="bg-circle bg-circle-1"></view>
+    <view class="bg-circle bg-circle-2"></view>
+    <view class="bg-circle bg-circle-3"></view>
+  </view>
+
+  <!-- 顶部区域 -->
+  <view class="hero">
+    <view class="hero-badge">助盲跑</view>
+    <view class="hero-title">让每一步<view class="highlight">都有意义</view></view>
+    <view class="hero-subtitle">连接视障跑者与志愿者，用奔跑传递温暖</view>
+  </view>
+
+  <!-- 角色选择区域 -->
+  <view class="role-section">
+    <view class="role-label">选择您的身份</view>
+
+    <view class="role-cards">
+      <!-- 盲人 -->
+      <view class="role-card role-blind" bindtap="selectRole" data-role="blind">
+        <view class="role-card-inner">
+          <view class="role-icon-wrap">
+            <view class="role-icon-bg"></view>
+            <view class="role-icon">
+              <view class="icon-eye"></view>
+            </view>
+          </view>
+          <view class="role-content">
+            <view class="role-name">视障跑者</view>
+            <view class="role-desc">寻找志愿者陪伴跑步</view>
+            <view class="role-arrow">→</view>
+          </view>
+        </view>
+        <view class="role-card-decoration"></view>
+      </view>
+
+      <!-- 志愿者 -->
+      <view class="role-card role-volunteer" bindtap="selectRole" data-role="volunteer">
+        <view class="role-card-inner">
+          <view class="role-icon-wrap">
+            <view class="role-icon-bg"></view>
+            <view class="role-icon">
+              <view class="icon-run"></view>
+            </view>
+          </view>
+          <view class="role-content">
+            <view class="role-name">志愿者</view>
+            <view class="role-desc">陪伴视障朋友跑步</view>
+            <view class="role-arrow">→</view>
+          </view>
+        </view>
+        <view class="role-card-decoration"></view>
+      </view>
+
+      <!-- 跑团 -->
+      <view class="role-card role-group" bindtap="selectRole" data-role="group">
+        <view class="role-card-inner">
+          <view class="role-icon-wrap">
+            <view class="role-icon-bg"></view>
+            <view class="role-icon">
+              <view class="icon-group">
+                <view class="icon-group-inner"></view>
+              </view>
+            </view>
+          </view>
+          <view class="role-content">
+            <view class="role-name">跑团</view>
+            <view class="role-desc">组织志愿者活动</view>
+            <view class="role-arrow">→</view>
+          </view>
+        </view>
+        <view class="role-card-decoration"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部信息 -->
+  <view class="footer">
+    <view class="footer-text">已有 <text class="highlight-text">1,280+</text> 人加入</view>
+  </view>
+</view>
