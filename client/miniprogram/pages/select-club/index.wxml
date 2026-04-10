@@ -1,0 +1,44 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="header-title">选择跑团</view>
+  </view>
+
+  <!-- 内容 -->
+  <view class="content">
+    <!-- 介绍区域 -->
+    <view class="intro-section">
+      <view class="intro-icon-text">跑</view>
+      <view class="intro-title">选择要加入的跑团</view>
+      <view class="intro-desc">加入跑团后可以参与发布和管理活动</view>
+    </view>
+
+    <!-- 跑团列表 -->
+    <view class="club-list">
+      <view
+        class="club-card {{selectedClubId === item.id ? 'selected' : ''}}"
+        wx:for="{{clubs}}"
+        wx:key="id"
+        bindtap="selectClub"
+        data-id="{{item.id}}"
+      >
+        <view class="club-avatar">{{item.name.charAt(0)}}</view>
+        <view class="club-info">
+          <view class="club-name">{{item.name}}</view>
+          <view class="club-meta">{{item.location}} · {{item.members}} 名成员</view>
+        </view>
+        <view class="club-check" wx:if="{{selectedClubId === item.id}}">✓</view>
+      </view>
+    </view>
+
+    <!-- 按钮 -->
+    <view class="btn-area">
+      <button
+        class="weui-btn {{selectedClubId ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
+        bindtap="doJoin"
+        disabled="{{!selectedClubId}}"
+      >申请加入</button>
+    </view>
+  </view>
+</view>

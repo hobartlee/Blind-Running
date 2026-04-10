@@ -1,0 +1,93 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="title">报名状态</view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 流程状态 -->
+    <view class="progress-steps anim-slide-up">
+      <view class="step-item {{step >= 1 ? 'active' : ''}} {{step > 1 ? 'completed' : ''}}">
+        <view class="step-dot-text">{{step > 1 ? '✓' : '1'}}</view>
+        <view class="step-label">待确认同行</view>
+      </view>
+      <view class="step-line {{step >= 2 ? 'active' : ''}}"></view>
+      <view class="step-item {{step >= 2 ? 'active' : ''}} {{step > 2 ? 'completed' : ''}}">
+        <view class="step-dot-text">{{step > 2 ? '✓' : '2'}}</view>
+        <view class="step-label">已确认待出行</view>
+      </view>
+      <view class="step-line {{step >= 3 ? 'active' : ''}}"></view>
+      <view class="step-item {{step >= 3 ? 'active' : ''}} {{step > 3 ? 'completed' : ''}}">
+        <view class="step-dot-text">{{step > 3 ? '✓' : '3'}}</view>
+        <view class="step-label">匹配成功待出行</view>
+      </view>
+      <view class="step-line {{step >= 4 ? 'active' : ''}}"></view>
+      <view class="step-item {{step >= 4 ? 'active' : ''}}">
+        <view class="step-dot-text">4</view>
+        <view class="step-label">出行完成</view>
+      </view>
+    </view>
+
+    <!-- 状态卡片 -->
+    <view class="status-card badge-{{signup.status}} anim-slide-up" style="animation-delay: 0.1s">
+      <view class="status-icon-text">{{signup.statusIcon}}</view>
+      <view class="status-info">
+        <view class="status-title">{{signup.statusTitle}}</view>
+        <view class="status-desc">{{signup.statusDesc}}</view>
+      </view>
+    </view>
+
+    <!-- 活动信息 -->
+    <view class="card anim-slide-up" style="animation-delay: 0.15s">
+      <view class="card-title">{{activity.title}}</view>
+      <view class="card-meta">{{activity.dateText}}</view>
+      <view class="card-meta">{{activity.timeText}}</view>
+      <view class="card-meta">{{activity.location}}</view>
+      <view class="card-meta">{{activity.durationText}}</view>
+      <view class="card-divider"></view>
+      <view class="card-info-row">
+        <view class="info-label">组织者</view>
+        <view class="info-value">{{activity.author}}</view>
+      </view>
+      <view class="card-info-row">
+        <view class="info-label">跑团</view>
+        <view class="info-value">{{activity.clubName}}</view>
+      </view>
+    </view>
+
+    <!-- 志愿者信息 -->
+    <view class="card anim-slide-up" style="animation-delay: 0.2s" wx:if="{{volunteer}}">
+      <view class="volunteer-header">
+        <view class="volunteer-avatar">{{volunteer.name.charAt(0)}}</view>
+        <view class="volunteer-info">
+          <view class="volunteer-name">{{volunteer.name}}</view>
+          <view class="volunteer-meta">{{volunteer.clubName}}</view>
+        </view>
+        <view class="volunteer-status {{volunteer.online ? 'online' : ''}}">
+          {{volunteer.online ? '在线' : '离线'}}
+        </view>
+      </view>
+      <view class="volunteer-stats">
+        <view class="stat-item">
+          <view class="stat-value">{{volunteer.activities}}</view>
+          <view class="stat-label">参加活动</view>
+        </view>
+        <view class="stat-item">
+          <view class="stat-value">{{volunteer.hours}}</view>
+          <view class="stat-label">陪伴时长(h)</view>
+        </view>
+        <view class="stat-item">
+          <view class="stat-value">{{volunteer.rating}}</view>
+          <view class="stat-label">评分</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons anim-slide-up" style="animation-delay: 0.25s">
+      <view class="btn-cancel" bindtap="cancelSignup">取消报名</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,145 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="header-left">
+      <view class="logo-text">{{clubName}}</view>
+    </view>
+    <view class="header-right">
+      <view class="switch-btn" bindtap="switchRole">切换</view>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 跑团信息卡片 -->
+    <view class="club-card anim-slide-up">
+      <view class="club-avatar-text">{{clubName ? clubName[0] : '跑'}}</view>
+      <view class="club-info">
+        <view class="club-name">{{clubName}}</view>
+        <view class="club-role">跑团管理员</view>
+        <view class="club-stats">
+          <text>{{memberCount}} 名成员</text>
+          <text wx:if="{{pendingCount > 0}}">{{pendingCount}} 待审核</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 统计 -->
+    <view class="stats-row anim-slide-up" style="animation-delay: 0.05s">
+      <view class="stat-item">
+        <view class="stat-value">{{totalActivities}}</view>
+        <view class="stat-label">总活动</view>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <view class="stat-value">{{totalHelped}}</view>
+        <view class="stat-label">帮助人次</view>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <view class="stat-value">4.8</view>
+        <view class="stat-label">评分</view>
+      </view>
+    </view>
+
+    <!-- 标签页 -->
+    <view class="tabs anim-slide-up" style="animation-delay: 0.1s">
+      <view class="tab {{activeTab === 'activities' ? 'active' : ''}}" bindtap="switchTab" data-tab="activities">活动记录</view>
+      <view class="tab {{activeTab === 'members' ? 'active' : ''}}" bindtap="switchTab" data-tab="members">成员管理</view>
+    </view>
+
+    <!-- 活动记录（只读，不能发布） -->
+    <view class="tab-content {{activeTab === 'activities' ? 'active' : ''}}">
+      <view class="section-title-text anim-slide-up" style="animation-delay: 0.15s">志愿者发布的活动</view>
+
+      <!-- 有活动数据 -->
+      <view class="activity-list" wx:if="{{activities.length > 0}}">
+        <view
+          class="activity-card anim-slide-up"
+          wx:for="{{activities}}"
+          wx:key="id"
+          wx:for-index="idx"
+          style="animation-delay: {{0.15 + idx * 0.05}}s"
+        >
+          <view class="activity-header">
+            <view class="activity-title">{{item.title}}</view>
+            <view class="activity-badge badge-{{item.status}}">{{item.statusText}}</view>
+          </view>
+          <view class="activity-meta">{{item.dateText}} · {{item.location}}</view>
+          <view class="activity-footer">
+            <view class="activity-signups">{{item.signups}} 人报名 / {{item.confirmed}} 人确认</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:else>
+        <view class="empty-icon-text">~</view>
+        <view class="empty-text">暂无活动记录</view>
+        <view class="empty-hint">志愿者发布活动后将在此处显示</view>
+      </view>
+    </view>
+
+    <!-- 成员管理 -->
+    <view class="tab-content {{activeTab === 'members' ? 'active' : ''}}">
+      <!-- 待审核 -->
+      <view class="section anim-slide-up" style="animation-delay: 0.15s">
+        <view class="section-title">待审核 ({{pendingMembers.length}})</view>
+
+        <view class="member-list" wx:if="{{pendingMembers.length > 0}}">
+          <view
+            class="member-card pending"
+            wx:for="{{pendingMembers}}"
+            wx:key="id"
+          >
+            <view class="member-avatar">{{item.name.charAt(0)}}</view>
+            <view class="member-info">
+              <view class="member-name">{{item.name}}</view>
+              <view class="member-meta">{{item.applyTime}} · {{item.experience}}</view>
+            </view>
+            <view class="btn-approve" bindtap="approveMember" data-id="{{item.id}}">通过</view>
+          </view>
+        </view>
+
+        <view class="empty-state small" wx:else>
+          <view class="empty-text">暂无待审核申请</view>
+        </view>
+      </view>
+
+      <!-- 已入驻 -->
+      <view class="section anim-slide-up" style="animation-delay: 0.2s">
+        <view class="section-title">已入驻成员 ({{joinedMembers.length}})</view>
+
+        <view class="member-list" wx:if="{{joinedMembers.length > 0}}">
+          <view
+            class="member-card"
+            wx:for="{{joinedMembers}}"
+            wx:key="id"
+          >
+            <view class="member-avatar">{{item.name.charAt(0)}}</view>
+            <view class="member-info">
+              <view class="member-name">{{item.name}}</view>
+              <view class="member-meta">{{item.joinTime}} · {{item.activities}}次活动</view>
+            </view>
+          </view>
+        </view>
+
+        <view class="empty-state small" wx:else>
+          <view class="empty-text">暂无已入驻成员</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="nav-item active">
+      <view class="nav-icon">🏠</view>
+      <view class="nav-label">首页</view>
+    </view>
+    <view class="nav-item" bindtap="goToMy">
+      <view class="nav-icon">⚙</view>
+      <view class="nav-label">设置</view>
+    </view>
+  </view>
+</view>
