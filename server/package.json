@@ -1,0 +1,16 @@
+{
+  "name": "bubu-cloud-server",
+  "version": "1.0.0",
+  "description": "步步有伴 后端服务",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.0",
+    "axios": "^1.4.0",
+    "xml2js": "^0.6.0",
+    "cors": "^2.8.5"
+  }
+}
