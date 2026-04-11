@@ -1,0 +1,129 @@
+/* WeUI 编辑资料页 */
+.page {
+  min-height: 100vh;
+  background: #F7F7F7;
+}
+
+/* 头部 */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 80rpx 32rpx 24rpx;
+  background: #fff;
+}
+
+.back-btn {
+  font-size: 60rpx;
+  color: #333;
+  padding: 0 8rpx;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.save-btn {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #07C160;
+  padding: 8rpx 16rpx;
+}
+
+/* 内容 */
+.content {
+  padding: 32rpx 32rpx 60rpx;
+}
+
+/* 头像区域 */
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.avatar-circle {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56rpx;
+  font-weight: 700;
+  margin-bottom: 12rpx;
+}
+
+.avatar-hint {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 性别选择 */
+.gender-selector {
+  display: flex;
+  gap: 16rpx;
+  padding: 8rpx 0;
+}
+
+.gender-btn {
+  flex: 1;
+  height: 72rpx;
+  background: #F8F8F8;
+  border-radius: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+}
+
+.gender-btn.active {
+  background: #E8F8F0;
+  border: 2rpx solid #07C160;
+}
+
+.gender-icon {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.gender-btn.active .gender-icon {
+  color: #07C160;
+}
+
+.gender-text {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #666;
+}
+
+.gender-btn.active .gender-text {
+  color: #07C160;
+}
+
+/* 经验选择 */
+.experience-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  padding: 8rpx 0;
+}
+
+.exp-btn {
+  padding: 12rpx 20rpx;
+  background: #F8F8F8;
+  border-radius: 100rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.exp-btn.active {
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+  color: #fff;
+}

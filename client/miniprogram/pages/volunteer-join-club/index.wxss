@@ -1,0 +1,136 @@
+/* ===== 页面容器 ===== */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F0FFF5 0%, #E8F8F0 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== 头部 ===== */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 80rpx 40rpx 30rpx;
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+}
+
+.back-btn {
+  font-size: 60rpx;
+  color: #fff;
+  padding: 0 10rpx;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #fff;
+  padding-right: 60rpx;
+}
+
+/* ===== 内容区域 ===== */
+.content {
+  padding: 0 32rpx 140rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 24rpx;
+}
+
+/* ===== 跑团列表 ===== */
+.club-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.club-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.club-item:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.club-item.selected {
+  border: 2rpx solid #07C160;
+  background: linear-gradient(135deg, #F0FFF5 0%, #E8F8F0 100%);
+}
+
+.club-avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.club-info {
+  flex: 1;
+}
+
+.club-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 8rpx;
+}
+
+.club-meta {
+  font-size: 26rpx;
+  color: #8C8C8C;
+}
+
+.club-check {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  border: 2rpx solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: transparent;
+  transition: all 0.3s ease;
+}
+
+.club-check.active {
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+  border-color: #07C160;
+  color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.3);
+}
+
+/* ===== 动画 ===== */
+.anim-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

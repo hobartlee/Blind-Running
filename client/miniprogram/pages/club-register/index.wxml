@@ -1,0 +1,93 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="header-title">入驻跑团</view>
+  </view>
+
+  <!-- 内容 -->
+  <view class="content">
+    <!-- 表单 -->
+    <view class="weui-cells weui-cells_form">
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">跑团名称</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input
+            class="weui-input"
+            type="text"
+            placeholder="请输入跑团名称"
+            bindinput="onNameInput"
+            value="{{name}}"
+          />
+        </view>
+      </view>
+
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">所在地</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input
+            class="weui-input"
+            type="text"
+            placeholder="例如：北京朝阳"
+            bindinput="onLocationInput"
+            value="{{location}}"
+          />
+        </view>
+      </view>
+
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">联系电话</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input
+            class="weui-input"
+            type="number"
+            maxlength="11"
+            placeholder="请输入手机号"
+            bindinput="onPhoneInput"
+            value="{{phone}}"
+          />
+        </view>
+      </view>
+
+      <view class="weui-cell weui-cell__ft">
+        <view class="weui-cell__bd">
+          <textarea
+            class="weui-textarea"
+            placeholder="跑团简介（选填）"
+            bindinput="onDescInput"
+            value="{{description}}"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 入驻须知 -->
+    <view class="notice-card">
+      <view class="notice-title">入驻须知</view>
+      <view class="notice-item">• 审核志愿者加入申请</view>
+      <view class="notice-item">• 发布和管理跑团活动</view>
+      <view class="notice-item">• 确保活动安全进行</view>
+    </view>
+
+    <!-- 同意协议 -->
+    <view class="agree-box {{agreed ? 'checked' : ''}}" bindtap="toggleAgree">
+      <view class="checkbox"></view>
+      <view class="agree-text">我已阅读并同意遵守跑团服务准则</view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="btn-area">
+      <button
+        class="weui-btn {{canSubmit ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
+        bindtap="doSubmit"
+        disabled="{{!canSubmit}}"
+      >立即入驻</button>
+    </view>
+  </view>
+</view>

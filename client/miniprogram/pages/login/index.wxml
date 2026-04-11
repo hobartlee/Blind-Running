@@ -1,0 +1,76 @@
+<view class="page">
+  <!-- 背景 -->
+  <view class="bg-decoration"></view>
+
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="header-title">手机号登录</view>
+  </view>
+
+  <!-- 内容 -->
+  <view class="content">
+    <!-- 步骤1: 手机号 -->
+    <view class="step-content {{step === 1 ? 'active' : ''}}">
+      <view class="weui-cells weui-cells_form">
+        <view class="weui-cell">
+          <view class="weui-cell__hd">
+            <text class="weui-label">+86</text>
+          </view>
+          <view class="weui-cell__bd">
+            <input
+              class="weui-input"
+              type="number"
+              maxlength="11"
+              placeholder="请输入手机号"
+              bindinput="onPhoneInput"
+              value="{{phone}}"
+            />
+          </view>
+        </view>
+      </view>
+
+      <view class="btn-area">
+        <button
+          class="weui-btn {{phone.length === 11 ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
+          bindtap="sendCode"
+          disabled="{{phone.length !== 11}}"
+        >获取验证码</button>
+      </view>
+    </view>
+
+    <!-- 步骤2: 验证码 -->
+    <view class="step-content {{step === 2 ? 'active' : ''}}">
+      <view class="page-desc">验证码已发送至 {{maskedPhone}}</view>
+
+      <view class="weui-cells weui-cells_form code-cells">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <input
+              class="weui-input code-input"
+              type="number"
+              maxlength="6"
+              placeholder="请输入验证码"
+              bindinput="onCodeInput"
+              value="{{code}}"
+            />
+          </view>
+        </view>
+      </view>
+
+      <view class="btn-area">
+        <button
+          class="weui-btn {{code.length === 6 ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
+          bindtap="doLogin"
+          disabled="{{code.length !== 6}}"
+        >登录</button>
+      </view>
+
+      <view class="resend-area">
+        <text class="{{counting ? 'resend-disabled' : 'resend'}}" bindtap="resendCode">
+          {{counting ? count + '秒后重发' : '重新发送'}}
+        </text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,264 @@
+/* ===== 页面容器 ===== */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F0F5FF 0%, #EBF0FF 100%);
+}
+
+/* ===== 头部 ===== */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 80rpx 40rpx 30rpx;
+  background: linear-gradient(135deg, #4A90FF 0%, #2563FF 100%);
+}
+
+.back-btn {
+  font-size: 60rpx;
+  color: #fff;
+  padding: 0 10rpx;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #fff;
+  padding-right: 60rpx;
+}
+
+/* ===== 标签页 ===== */
+.tabs-wrap {
+  padding: 24rpx 32rpx 0;
+}
+
+.tabs {
+  display: flex;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 8rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.tab {
+  flex: 1;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #666;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+}
+
+.tab.active {
+  background: linear-gradient(135deg, #4A90FF 0%, #2563FF 100%);
+  color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(74, 144, 255, 0.3);
+}
+
+.tab-badge {
+  background: #FF6B5B;
+  color: #fff;
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  font-weight: 700;
+}
+
+.tab.active .tab-badge {
+  background: #fff;
+  color: #4A90FF;
+}
+
+/* ===== 内容区域 ===== */
+.content {
+  padding: 24rpx 32rpx;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ===== 志愿者卡片 ===== */
+.volunteer-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.volunteer-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.volunteer-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4A90FF 0%, #2563FF 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  font-weight: 700;
+  margin-right: 20rpx;
+}
+
+.volunteer-info {
+  flex: 1;
+}
+
+.volunteer-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 6rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.level-badge {
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 4rpx 12rpx;
+  background: linear-gradient(135deg, #FFF5E8 0%, #FFE8D6 100%);
+  color: #FF9A4D;
+  border-radius: 8rpx;
+}
+
+.volunteer-meta {
+  font-size: 26rpx;
+  color: #8C8C8C;
+}
+
+.volunteer-time {
+  font-size: 24rpx;
+  color: #B0B0B0;
+}
+
+/* ===== 标签 ===== */
+.volunteer-tags {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.tag {
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  background: #F5F5F5;
+  color: #666;
+  border-radius: 8rpx;
+}
+
+/* ===== 操作按钮 ===== */
+.volunteer-actions {
+  display: flex;
+  gap: 16rpx;
+  padding-top: 20rpx;
+  border-top: 1px solid #F5F5F5;
+}
+
+.action-reject,
+.action-approve {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.action-reject {
+  background: #F5F5F5;
+  color: #666;
+}
+
+.action-approve {
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+  color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.3);
+}
+
+/* ===== 统计数据 ===== */
+.member-stats {
+  display: flex;
+  padding-top: 20rpx;
+  border-top: 1px solid #F5F5F5;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #4A90FF;
+  margin-bottom: 4rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #8C8C8C;
+}
+
+/* ===== 空状态 ===== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-icon {
+  font-size: 128rpx;
+  margin-bottom: 32rpx;
+}
+
+.empty-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 28rpx;
+  color: #8C8C8C;
+  text-align: center;
+}
+
+/* ===== 动画 ===== */
+.anim-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,120 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="header-left">
+      <view class="logo-text">助盲跑</view>
+    </view>
+    <view class="header-right">
+      <view class="switch-btn" bindtap="switchRole">切换</view>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 用户信息卡片 -->
+    <view class="user-card anim-slide-up">
+      <view class="user-avatar-text">{{userName ? userName[0] : '视'}}</view>
+      <view class="user-info">
+        <view class="user-name">{{userName || '欢迎'}}</view>
+        <view class="user-role">视障跑者</view>
+      </view>
+      <view class="user-badge">认证用户</view>
+    </view>
+
+    <!-- 我的报名 -->
+    <view class="section anim-slide-up" style="animation-delay: 0.1s">
+      <view class="section-header">
+        <view class="section-title">我的报名</view>
+      </view>
+
+      <!-- 有报名数据 -->
+      <view class="signup-list" wx:if="{{mySignups.length > 0}}">
+        <view
+          class="signup-card"
+          wx:for="{{mySignups}}"
+          wx:key="id"
+          bindtap="goToSignupStatus"
+          data-id="{{item.id}}"
+        >
+          <view class="signup-status {{item.status}}"></view>
+          <view class="signup-info">
+            <view class="signup-title">{{item.title}}</view>
+            <view class="signup-meta">{{item.dateText}} · {{item.location}}</view>
+          </view>
+          <view class="signup-badge badge-{{item.status}}">{{item.statusText}}</view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:else>
+        <view class="empty-icon-text">~</view>
+        <view class="empty-text">暂无报名活动</view>
+        <view class="empty-hint">去首页浏览活动报名吧</view>
+      </view>
+    </view>
+
+    <view class="divider-line"></view>
+
+    <!-- 可参加的活动 -->
+    <view class="section anim-slide-up" style="animation-delay: 0.15s">
+      <view class="section-header">
+        <view class="section-title">可参加的活动</view>
+      </view>
+
+      <!-- 有活动数据 -->
+      <view class="activity-list" wx:if="{{activities.length > 0}}">
+        <view
+          class="activity-card"
+          wx:for="{{activities}}"
+          wx:key="id"
+          bindtap="goToActivityDetail"
+          data-id="{{item.id}}"
+        >
+          <view class="activity-header">
+            <view class="activity-title">{{item.title}}</view>
+            <view class="activity-badge club">{{item.clubName}}</view>
+          </view>
+          <view class="activity-meta">
+            <view class="meta-item">
+              <text class="meta-text">{{item.dateText}}</text>
+            </view>
+            <view class="meta-item">
+              <text class="meta-text">{{item.location}}</text>
+            </view>
+            <view class="meta-item">
+              <text class="meta-text">{{item.durationText}}</text>
+            </view>
+            <view class="meta-item distance" wx:if="{{item.distance}}">
+              <text class="meta-text">{{item.distance}}</text>
+            </view>
+          </view>
+          <view class="activity-footer">
+            <view class="activity-author">{{item.author}}</view>
+            <view class="activity-signups">
+              <text class="signup-count">{{item.signups}}</text> 人已报名
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:else>
+        <view class="empty-icon-text">~</view>
+        <view class="empty-text">暂无可参加的活动</view>
+        <view class="empty-hint">敬请期待更多志愿者发布的活动</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="nav-item active">
+      <view class="nav-icon-text">首</view>
+      <view class="nav-label">首页</view>
+    </view>
+    <view class="nav-item" bindtap="goToMy">
+      <view class="nav-icon-text">我</view>
+      <view class="nav-label">我的</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,89 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="header-title">编辑资料</view>
+    <view class="save-btn" bindtap="doSave">保存</view>
+  </view>
+
+  <!-- 内容 -->
+  <view class="content">
+    <!-- 头像 -->
+    <view class="avatar-section">
+      <view class="avatar-circle">{{name[0] || '志'}}</view>
+      <view class="avatar-hint">点击保存姓名后头像会自动更新</view>
+    </view>
+
+    <!-- 表单 -->
+    <view class="weui-cells weui-cells_form">
+      <!-- 姓名 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">姓名</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input
+            class="weui-input"
+            type="text"
+            placeholder="请输入您的姓名"
+            bindinput="onNameInput"
+            value="{{name}}"
+          />
+        </view>
+      </view>
+
+      <!-- 性别 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">性别</view>
+        </view>
+        <view class="weui-cell__bd">
+          <view class="gender-selector">
+            <view
+              class="gender-btn {{gender === 'male' ? 'active' : ''}}"
+              bindtap="selectGender"
+              data-gender="male"
+            >
+              <view class="gender-icon">♂</view>
+              <view class="gender-text">男</view>
+            </view>
+            <view
+              class="gender-btn {{gender === 'female' ? 'active' : ''}}"
+              bindtap="selectGender"
+              data-gender="female"
+            >
+              <view class="gender-icon">♀</view>
+              <view class="gender-text">女</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 跑步经验 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">跑步经验</view>
+        </view>
+        <view class="weui-cell__bd">
+          <view class="experience-selector">
+            <view
+              class="exp-btn {{experience === 'none' ? 'active' : ''}}"
+              bindtap="selectExperience"
+              data-exp="none"
+            >无经验</view>
+            <view
+              class="exp-btn {{experience === 'intermediate' ? 'active' : ''}}"
+              bindtap="selectExperience"
+              data-exp="intermediate"
+            >有经验</view>
+            <view
+              class="exp-btn {{experience === 'experienced' ? 'active' : ''}}"
+              bindtap="selectExperience"
+              data-exp="experienced"
+            >经验丰富</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

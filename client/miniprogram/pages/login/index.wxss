@@ -1,0 +1,82 @@
+/* WeUI 登录页 */
+.page {
+  min-height: 100vh;
+  background: #F7F7F7;
+}
+
+/* 头部 */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 80rpx 32rpx 24rpx;
+  background: #fff;
+}
+
+.back-btn {
+  font-size: 60rpx;
+  color: #333;
+  padding: 0 8rpx;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  padding-right: 68rpx;
+}
+
+/* 内容 */
+.content {
+  padding: 48rpx 32rpx;
+}
+
+/* 步骤内容 */
+.step-content {
+  display: none;
+}
+
+.step-content.active {
+  display: block;
+}
+
+/* 页面描述 */
+.page-desc {
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+/* 验证码输入 */
+.code-cells {
+  margin-bottom: 32rpx;
+}
+
+.code-input {
+  letter-spacing: 8rpx;
+  text-align: center;
+  font-size: 36rpx;
+}
+
+/* 按钮区域 */
+.btn-area {
+  margin-top: 48rpx;
+}
+
+/* 重发区域 */
+.resend-area {
+  text-align: center;
+  margin-top: 32rpx;
+}
+
+.resend {
+  font-size: 28rpx;
+  color: #576B95;
+}
+
+.resend-disabled {
+  font-size: 28rpx;
+  color: #999;
+}

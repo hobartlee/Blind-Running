@@ -1,0 +1,53 @@
+<view class="page">
+  <!-- 背景装饰 -->
+  <view class="bg-decoration">
+    <view class="bg-circle bg-circle-1"></view>
+    <view class="bg-circle bg-circle-2"></view>
+  </view>
+
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="header-title">{{title}}</view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 步骤指示器 -->
+    <view class="step-indicator anim-slide-up">
+      <view class="step-dot completed"></view>
+      <view class="step-dot completed"></view>
+      <view class="step-dot active"></view>
+    </view>
+
+    <!-- 使命横幅 -->
+    <view class="mission-banner anim-slide-up" style="animation-delay: 0.1s">
+      <view class="mission-icon">{{icon}}</view>
+      <view class="mission-title">{{title}}</view>
+      <view class="mission-desc">{{desc}}</view>
+    </view>
+
+    <!-- 准则卡片 -->
+    <view class="guide-card anim-slide-up" style="animation-delay: 0.15s">
+      <view class="guide-title">{{guideTitle}}</view>
+      <view class="guide-list">
+        <view class="guide-item" wx:for="{{guideItems}}" wx:key="*this">{{item}}</view>
+      </view>
+    </view>
+
+    <!-- 同意条款 -->
+    <view class="agree-box {{agreed ? 'checked' : ''}} anim-slide-up" style="animation-delay: 0.2s" bindtap="toggleAgree">
+      <view class="agree-checkbox">
+        <text wx:if="{{agreed}}">✓</text>
+      </view>
+      <view class="agree-text">{{agreeText}}</view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="btn-wrapper anim-slide-up" style="animation-delay: 0.25s">
+      <view class="btn-primary {{agreed ? '' : 'disabled'}}" bindtap="doSubmit">
+        {{submitText}}
+      </view>
+    </view>
+  </view>
+</view>

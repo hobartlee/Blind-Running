@@ -1,0 +1,258 @@
+/* ===== 页面容器 ===== */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FFF9F5 0%, #FFF5F0 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== 背景装饰 ===== */
+.bg-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
+}
+
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.4;
+}
+
+.bg-circle-1 {
+  width: 400rpx;
+  height: 400rpx;
+  background: linear-gradient(135deg, #FFE4D6 0%, #FFD6C4 100%);
+  top: -100rpx;
+  left: -100rpx;
+}
+
+.bg-circle-2 {
+  width: 300rpx;
+  height: 300rpx;
+  background: linear-gradient(135deg, #E8F8F0 0%, #D4F0E5 100%);
+  bottom: 200rpx;
+  right: -80rpx;
+}
+
+/* ===== 头部 ===== */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 80rpx 40rpx 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.back-btn {
+  font-size: 64rpx;
+  color: #2D2D2D;
+  padding: 0 16rpx;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  padding-right: 80rpx;
+}
+
+/* ===== 内容区域 ===== */
+.content {
+  padding: 0 48rpx;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== 步骤指示器 ===== */
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 16rpx;
+  padding: 20rpx 0 40rpx;
+}
+
+.step-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 8rpx;
+  background: #E8E8E8;
+}
+
+.step-dot.active {
+  width: 48rpx;
+  background: linear-gradient(135deg, #FF8C69 0%, #FF6B5B 100%);
+}
+
+.step-dot.completed {
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+}
+
+/* ===== 使命横幅 ===== */
+.mission-banner {
+  text-align: center;
+  padding: 40rpx 30rpx;
+  background: linear-gradient(135deg, #FFF9F5 0%, #FFF5F0 100%);
+  border-radius: 28rpx;
+  margin-bottom: 32rpx;
+}
+
+.mission-icon {
+  font-size: 100rpx;
+  margin-bottom: 20rpx;
+}
+
+.mission-title {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #2D2D2D;
+  margin-bottom: 16rpx;
+}
+
+.mission-desc {
+  font-size: 28rpx;
+  color: #8C8C8C;
+  line-height: 1.6;
+}
+
+/* ===== 准则卡片 ===== */
+.guide-card {
+  background: #fff;
+  border-radius: 28rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.06);
+}
+
+.guide-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 24rpx;
+  padding-left: 20rpx;
+  border-left: 6rpx solid #FF8C69;
+}
+
+.guide-list {
+  padding-left: 0;
+}
+
+.guide-item {
+  font-size: 28rpx;
+  color: #666;
+  padding: 14rpx 0;
+  padding-left: 36rpx;
+  position: relative;
+  border-bottom: 1px solid #F5F5F5;
+}
+
+.guide-item:last-child {
+  border-bottom: none;
+}
+
+.guide-item::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #07C160;
+  font-weight: bold;
+  font-size: 26rpx;
+}
+
+/* ===== 同意条款 ===== */
+.agree-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+  padding: 28rpx;
+  background: #fff;
+  border: 2rpx solid #E8E8E8;
+  border-radius: 20rpx;
+  margin-bottom: 32rpx;
+  transition: all 0.3s ease;
+}
+
+.agree-box.checked {
+  border-color: #07C160;
+  background: linear-gradient(135deg, #F0FFF5 0%, #E8F8F0 100%);
+}
+
+.agree-checkbox {
+  width: 44rpx;
+  height: 44rpx;
+  border: 2rpx solid #D0D0D0;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: #fff;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.agree-box.checked .agree-checkbox {
+  background: #07C160;
+  border-color: #07C160;
+}
+
+.agree-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* ===== 按钮 ===== */
+.btn-wrapper {
+  padding-bottom: 60rpx;
+}
+
+.btn-primary {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+  color: #fff;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 32rpx rgba(7, 193, 96, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-primary.disabled {
+  background: #E8E8E8;
+  color: #B0B0B0;
+  box-shadow: none;
+}
+
+/* ===== 动画 ===== */
+.anim-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

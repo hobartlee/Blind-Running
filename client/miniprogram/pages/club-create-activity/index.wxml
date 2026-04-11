@@ -1,0 +1,113 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="header-title">发布例跑活动</view>
+  </view>
+
+  <!-- 内容 -->
+  <view class="content">
+    <view class="weui-cells weui-cells_form">
+      <!-- 活动名称 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">活动名称</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input
+            class="weui-input"
+            type="text"
+            placeholder="例如：周六朝阳公园例跑"
+            bindinput="onNameInput"
+            value="{{name}}"
+          />
+        </view>
+      </view>
+
+      <!-- 日期 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">日期</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker mode="date" bindchange="onDateChange">
+            <view class="weui-input">{{date || '请选择日期'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 时间 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">时间</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker mode="time" bindchange="onTimeChange">
+            <view class="weui-input">{{time || '请选择时间'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 地点 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">地点</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input
+            class="weui-input"
+            type="text"
+            placeholder="例如：朝阳公园东门"
+            bindinput="onLocationInput"
+            value="{{location}}"
+          />
+        </view>
+      </view>
+
+      <!-- 活动类型 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">活动类型</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker mode="selector" range="{{types}}" range-key="label" bindchange="onTypeChange">
+            <view class="weui-input">{{typeText || '请选择活动类型'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 预计时长 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">预计时长</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker mode="selector" range="{{durations}}" bindchange="onDurationChange">
+            <view class="weui-input">{{durationText || '请选择时长'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 备注 -->
+      <view class="weui-cell weui-cell__ft">
+        <view class="weui-cell__bd">
+          <textarea
+            class="weui-textarea"
+            placeholder="其他说明（可选）"
+            bindinput="onNoteInput"
+            value="{{note}}"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="btn-area">
+      <button
+        class="weui-btn {{canSubmit ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
+        bindtap="doSubmit"
+        disabled="{{!canSubmit}}"
+      >发布活动</button>
+    </view>
+  </view>
+</view>

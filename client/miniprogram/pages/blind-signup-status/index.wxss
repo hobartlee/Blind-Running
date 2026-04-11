@@ -1,0 +1,348 @@
+/* ===== 页面容器 ===== */
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FFF9F5 0%, #FFF5F0 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== 头部 ===== */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 80rpx 40rpx 30rpx;
+  background: linear-gradient(135deg, #FF9A7A 0%, #FF8C69 100%);
+}
+
+.back-btn {
+  font-size: 60rpx;
+  color: #fff;
+  padding: 0 10rpx;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #fff;
+  padding-right: 60rpx;
+}
+
+/* ===== 内容区域 ===== */
+.content {
+  padding: 0 32rpx 140rpx;
+}
+
+/* ===== 流程步骤 ===== */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx 20rpx;
+  margin-bottom: 24rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.step-dot {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #E8E8E8;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.step-item.active .step-dot {
+  background: linear-gradient(135deg, #FF9A7A 0%, #FF8C69 100%);
+  box-shadow: 0 4rpx 16rpx rgba(255, 140, 105, 0.3);
+}
+
+.step-item.completed .step-dot {
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+}
+
+.step-label {
+  font-size: 22rpx;
+  color: #8C8C8C;
+  transition: all 0.3s ease;
+}
+
+.step-item.active .step-label {
+  color: #FF6B5B;
+  font-weight: 600;
+}
+
+.step-item.completed .step-label {
+  color: #07C160;
+}
+
+.step-line {
+  width: 60rpx;
+  height: 4rpx;
+  background: #E8E8E8;
+  margin: 0 8rpx;
+  margin-bottom: 32rpx;
+  transition: all 0.3s ease;
+}
+
+.step-line.active {
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+}
+
+/* ===== 状态卡片 ===== */
+.status-card {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 32rpx;
+  border-radius: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.status-card.badge-pending {
+  background: linear-gradient(135deg, #FFF5E8 0%, #FFE8D6 100%);
+  border-left: 6rpx solid #FF9A4D;
+}
+
+.status-card.badge-matched {
+  background: linear-gradient(135deg, #E8F0FF 0%, #D6E8FF 100%);
+  border-left: 6rpx solid #4A90FF;
+}
+
+.status-card.badge-confirmed {
+  background: linear-gradient(135deg, #E8F8F0 0%, #D4F0E5 100%);
+  border-left: 6rpx solid #07C160;
+}
+
+.status-card.badge-waiting {
+  background: linear-gradient(135deg, #FFF5E8 0%, #FFE8D6 100%);
+  border-left: 6rpx solid #FF9A4D;
+}
+
+.status-card.badge-completed {
+  background: linear-gradient(135deg, #E8F8F0 0%, #D4F0E5 100%);
+  border-left: 6rpx solid #07C160;
+}
+
+.status-icon {
+  font-size: 64rpx;
+}
+
+.status-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 4rpx;
+}
+
+.status-desc {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* ===== 卡片 ===== */
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.card-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 16rpx;
+}
+
+.card-meta {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.card-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #E8E8E8 50%, transparent 100%);
+  margin: 20rpx 0;
+}
+
+.card-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10rpx 0;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #8C8C8C;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #2D2D2D;
+}
+
+/* ===== 志愿者信息 ===== */
+.volunteer-header {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 24rpx;
+}
+
+.volunteer-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF9A7A 0%, #FF8C69 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.volunteer-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #2D2D2D;
+  margin-bottom: 4rpx;
+}
+
+.volunteer-meta {
+  font-size: 26rpx;
+  color: #8C8C8C;
+}
+
+.volunteer-status {
+  font-size: 24rpx;
+  font-weight: 600;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+  background: #F5F5F5;
+  color: #8C8C8C;
+}
+
+.volunteer-status.online {
+  background: linear-gradient(135deg, #E8F8F0 0%, #D4F0E5 100%);
+  color: #07C160;
+}
+
+.volunteer-stats {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 20rpx;
+  border-top: 1px solid #F5F5F5;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #FF6B5B;
+  margin-bottom: 4rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #8C8C8C;
+}
+
+/* ===== 操作按钮 ===== */
+.action-buttons {
+  margin-top: 32rpx;
+}
+
+.btn-cancel {
+  width: 100%;
+  height: 96rpx;
+  background: #fff;
+  color: #FF6B5B;
+  border: 2rpx solid #FF6B5B;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.btn-cancel:active {
+  opacity: 0.7;
+}
+
+/* ===== 底部导航 ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  padding: 16rpx 0;
+  padding-bottom: max(16rpx, env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 24rpx rgba(0, 0, 0, 0.03);
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  padding: 8rpx;
+  color: #B0B0B0;
+}
+
+.nav-item.active {
+  color: #FF6B5B;
+}
+
+.nav-icon {
+  font-size: 44rpx;
+}
+
+.nav-label {
+  font-size: 22rpx;
+  font-weight: 500;
+}
+
+/* ===== 动画 ===== */
+.anim-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,31 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="title">加入跑团</view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <view class="section-title anim-slide-up">选择要加入的跑团</view>
+
+    <view class="club-list">
+      <view
+        class="club-item anim-slide-up {{selectedClubId === item.id ? 'selected' : ''}}"
+        wx:for="{{clubs}}"
+        wx:key="id"
+        wx:for-index="idx"
+        style="animation-delay: {{0.1 + idx * 0.05}}s"
+        bindtap="selectClub"
+        data-id="{{item.id}}"
+      >
+        <view class="club-avatar">{{item.name.charAt(0)}}</view>
+        <view class="club-info">
+          <view class="club-name">{{item.name}}</view>
+          <view class="club-meta">{{item.location}}</view>
+        </view>
+        <view class="club-check {{selectedClubId === item.id ? 'active' : ''}}">✓</view>
+      </view>
+    </view>
+  </view>
+</view>

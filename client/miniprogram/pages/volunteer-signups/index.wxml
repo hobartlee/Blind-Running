@@ -1,0 +1,69 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="title">报名列表</view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 活动信息卡片 -->
+    <view class="activity-card anim-slide-up">
+      <view class="activity-info">
+        <view class="activity-title">{{activity.title}}</view>
+        <view class="activity-meta">{{activity.dateText}} · 已有 {{totalCount}} 人报名</view>
+      </view>
+      <view class="btn-remind" bindtap="sendRemind">发送提醒</view>
+    </view>
+
+    <!-- 待确认（志愿者接受前） -->
+    <view class="section anim-slide-up" style="animation-delay: 0.05s">
+      <view class="section-title">待接受 ({{pendingCount}})</view>
+      <view class="member-list">
+        <view class="member-card anim-slide-up" wx:for="{{pendingMembers}}" wx:key="id" wx:for-index="idx" style="animation-delay: {{0.1 + idx * 0.05}}s">
+          <view class="member-avatar">{{item.name.charAt(0)}}</view>
+          <view class="member-info">
+            <view class="member-name">{{item.name}}</view>
+            <view class="member-meta">{{item.meta}}</view>
+            <view class="member-experience">{{item.experience}}</view>
+          </view>
+          <view class="member-actions">
+            <view class="btn-accept" bindtap="acceptMember" data-id="{{item.id}}">接受</view>
+            <view class="btn-reject" bindtap="rejectMember" data-id="{{item.id}}">拒绝</view>
+          </view>
+        </view>
+      </view>
+      <view class="empty-hint" wx:if="{{pendingCount === 0}}">暂无待接受的报名</view>
+    </view>
+
+    <!-- 已接受 - 待同行 -->
+    <view class="section anim-slide-up" style="animation-delay: 0.15s" wx:if="{{acceptedCount > 0}}">
+      <view class="section-title">已接受 - 待同行 ({{acceptedCount}})</view>
+      <view class="member-list">
+        <view class="member-card accepted anim-slide-up" wx:for="{{acceptedMembers}}" wx:key="id" wx:for-index="idx" style="animation-delay: {{0.2 + idx * 0.05}}s">
+          <view class="member-avatar accepted">{{item.name.charAt(0)}}</view>
+          <view class="member-info">
+            <view class="member-name">{{item.name}}</view>
+            <view class="member-meta">{{item.meta}}</view>
+          </view>
+          <view class="member-status waiting">等待同行</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 已完成 -->
+    <view class="section anim-slide-up" style="animation-delay: 0.2s" wx:if="{{completedCount > 0}}">
+      <view class="section-title">已完成 ({{completedCount}})</view>
+      <view class="member-list">
+        <view class="member-card completed anim-slide-up" wx:for="{{completedMembers}}" wx:key="id" wx:for-index="idx" style="animation-delay: {{0.25 + idx * 0.05}}s">
+          <view class="member-avatar-text completed">✓</view>
+          <view class="member-info">
+            <view class="member-name">{{item.name}}</view>
+            <view class="member-meta">{{item.completedDate}}</view>
+          </view>
+          <view class="member-status completed">已完成</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,167 @@
+/* WeUI 残疾人证明页 */
+.page {
+  min-height: 100vh;
+  background: #F7F7F7;
+}
+
+/* 头部 */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 80rpx 32rpx 24rpx;
+  background: #fff;
+}
+
+.back-btn {
+  font-size: 60rpx;
+  color: #333;
+  padding: 0 8rpx;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  padding-right: 68rpx;
+}
+
+/* 内容 */
+.content {
+  padding: 32rpx 32rpx 60rpx;
+}
+
+/* 介绍区域 */
+.intro-section {
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.intro-icon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}
+
+.intro-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.intro-desc {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 认证卡片 */
+.cert-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.cert-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.cert-icon {
+  font-size: 48rpx;
+}
+
+.cert-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.cert-sub {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.cert-benefits {
+  padding-left: 64rpx;
+}
+
+.benefit-item {
+  font-size: 26rpx;
+  color: #666;
+  padding: 6rpx 0;
+}
+
+/* 选择区域 */
+.select-section {
+  margin-bottom: 32rpx;
+}
+
+.select-label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 16rpx;
+  text-align: center;
+}
+
+.select-buttons {
+  display: flex;
+  gap: 16rpx;
+}
+
+.select-btn {
+  flex: 1;
+  height: 88rpx;
+  background: #fff;
+  border: 2rpx solid #E8E8E8;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+}
+
+.select-btn.active {
+  border-color: #FF8C69;
+  background: #FFF5F0;
+}
+
+.select-icon {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.select-btn.active .select-icon {
+  color: #FF6B5B;
+}
+
+.select-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.select-btn.active .select-text {
+  color: #FF6B5B;
+}
+
+.select-hint {
+  font-size: 24rpx;
+  color: #F59E0B;
+  text-align: center;
+  margin-top: 12rpx;
+  opacity: 0;
+}
+
+.select-hint.show {
+  opacity: 1;
+}
+
+/* 按钮区域 */
+.btn-area {
+  margin-top: 32rpx;
+}

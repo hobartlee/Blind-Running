@@ -1,0 +1,85 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="header-title">发布活动</view>
+  </view>
+
+  <!-- 内容 -->
+  <view class="content">
+    <view class="weui-cells weui-cells_form">
+      <!-- 地点 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">集合地点</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input
+            class="weui-input"
+            type="text"
+            placeholder="例如：朝阳公园东门"
+            bindinput="onLocationInput"
+            value="{{location}}"
+          />
+        </view>
+      </view>
+
+      <!-- 时间 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">开始时间</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker mode="time" bindchange="onTimeChange">
+            <view class="weui-input">{{time || '请选择时间'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 日期 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">日期</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker mode="date" bindchange="onDateChange">
+            <view class="weui-input">{{date || '请选择日期'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 持续时间 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">持续时间</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker mode="selector" range="{{durations}}" bindchange="onDurationChange">
+            <view class="weui-input">{{durationText || '请选择时长'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 跑步经验 -->
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">经验要求</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker mode="selector" range="{{experiences}}" range-key="label" bindchange="onExperienceChange">
+            <view class="weui-input">{{experienceText || '请选择经验要求'}}</view>
+          </picker>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="btn-area">
+      <button
+        class="weui-btn {{canSubmit ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
+        bindtap="doSubmit"
+        disabled="{{!canSubmit}}"
+      >发布活动</button>
+    </view>
+  </view>
+</view>

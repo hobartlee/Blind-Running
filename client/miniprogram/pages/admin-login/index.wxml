@@ -1,0 +1,38 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="header-title">管理员登录</view>
+  </view>
+
+  <!-- 内容 -->
+  <view class="content">
+    <view class="page-desc">请输入管理员手机号登录后台</view>
+
+    <view class="weui-cells weui-cells_form">
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <text class="weui-label">+86</text>
+        </view>
+        <view class="weui-cell__bd">
+          <input
+            class="weui-input"
+            type="number"
+            maxlength="11"
+            placeholder="请输入手机号"
+            bindinput="onPhoneInput"
+            value="{{phone}}"
+          />
+        </view>
+      </view>
+    </view>
+
+    <view class="btn-area">
+      <button
+        class="weui-btn {{phone.length === 11 ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
+        bindtap="doLogin"
+        disabled="{{phone.length !== 11}}"
+      >登录</button>
+    </view>
+  </view>
+</view>

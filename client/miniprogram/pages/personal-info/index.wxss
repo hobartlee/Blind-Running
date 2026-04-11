@@ -1,0 +1,129 @@
+/* WeUI 个人信息页 */
+.page {
+  min-height: 100vh;
+  background: #F7F7F7;
+}
+
+/* 头部 */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 80rpx 32rpx 24rpx;
+  background: #fff;
+}
+
+.back-btn {
+  font-size: 60rpx;
+  color: #333;
+  padding: 0 8rpx;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  padding-right: 68rpx;
+}
+
+/* 内容 */
+.content {
+  padding: 32rpx 32rpx 60rpx;
+}
+
+/* 头像预览 */
+.avatar-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.avatar-circle {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FFE4D6 0%, #FFD6C4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16rpx;
+}
+
+.avatar-icon {
+  font-size: 64rpx;
+}
+
+.avatar-hint {
+  font-size: 26rpx;
+  color: #8C8C8C;
+}
+
+/* 性别选择 */
+.gender-selector {
+  display: flex;
+  gap: 20rpx;
+  padding: 8rpx 0;
+}
+
+.gender-btn {
+  flex: 1;
+  height: 72rpx;
+  background: #F8F8F8;
+  border-radius: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+}
+
+.gender-btn.active {
+  background: #FFF0EA;
+  border: 2rpx solid #FF8C69;
+}
+
+.gender-icon {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.gender-btn.active .gender-icon {
+  color: #FF6B5B;
+}
+
+.gender-text {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #666;
+}
+
+.gender-btn.active .gender-text {
+  color: #FF6B5B;
+}
+
+/* 经验选择 */
+.experience-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  padding: 8rpx 0;
+}
+
+.exp-btn {
+  padding: 12rpx 20rpx;
+  background: #F8F8F8;
+  border-radius: 100rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.exp-btn.active {
+  background: linear-gradient(135deg, #FF8C69 0%, #FF6B5B 100%);
+  color: #fff;
+}
+
+/* 按钮区域 */
+.btn-area {
+  margin-top: 48rpx;
+}

@@ -1,0 +1,97 @@
+/* WeUI 入驻跑团页 */
+.page {
+  min-height: 100vh;
+  background: #F7F7F7;
+}
+
+/* 头部 */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 80rpx 32rpx 24rpx;
+  background: #fff;
+}
+
+.back-btn {
+  font-size: 60rpx;
+  color: #333;
+  padding: 0 8rpx;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  padding-right: 68rpx;
+}
+
+/* 内容 */
+.content {
+  padding: 32rpx 32rpx 60rpx;
+}
+
+/* 须知卡片 */
+.notice-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-top: 24rpx;
+}
+
+.notice-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.notice-item {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* 同意框 */
+.agree-box {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 24rpx;
+  margin-top: 24rpx;
+}
+
+.checkbox {
+  width: 40rpx;
+  height: 40rpx;
+  border: 2rpx solid #D1D5DB;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+}
+
+.agree-box.checked .checkbox {
+  background: #07C160;
+  border-color: #07C160;
+  position: relative;
+}
+
+.agree-box.checked .checkbox::after {
+  content: '✓';
+  color: #fff;
+  font-size: 24rpx;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.agree-text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 按钮区域 */
+.btn-area {
+  margin-top: 48rpx;
+}

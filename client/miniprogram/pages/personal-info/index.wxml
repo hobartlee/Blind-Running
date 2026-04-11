@@ -1,0 +1,111 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="header-title">完善个人信息</view>
+  </view>
+
+  <!-- 内容 -->
+  <view class="content">
+    <!-- 用户头像预览 -->
+    <view class="avatar-preview">
+      <view class="avatar-circle">
+        <view class="avatar-icon-text">人</view>
+      </view>
+      <view class="avatar-hint">填写您的基本信息</view>
+    </view>
+
+    <!-- 表单 -->
+    <view class="weui-cells weui-cells_form">
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">姓名</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input
+            class="weui-input"
+            type="text"
+            placeholder="请输入您的姓名"
+            bindinput="onNameInput"
+            value="{{name}}"
+          />
+        </view>
+      </view>
+
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">性别</view>
+        </view>
+        <view class="weui-cell__bd">
+          <view class="gender-selector">
+            <view
+              class="gender-btn {{gender === 'male' ? 'active' : ''}}"
+              bindtap="selectGender"
+              data-gender="male"
+            >
+              <view class="gender-icon">♂</view>
+              <view class="gender-text">男</view>
+            </view>
+            <view
+              class="gender-btn {{gender === 'female' ? 'active' : ''}}"
+              bindtap="selectGender"
+              data-gender="female"
+            >
+              <view class="gender-icon">♀</view>
+              <view class="gender-text">女</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">年龄</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input
+            class="weui-input"
+            type="number"
+            placeholder="请输入年龄"
+            bindinput="onAgeInput"
+            value="{{age}}"
+          />
+        </view>
+      </view>
+
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <view class="weui-label">跑步经验</view>
+        </view>
+        <view class="weui-cell__bd">
+          <view class="experience-selector">
+            <view
+              class="exp-btn {{experience === 'none' ? 'active' : ''}}"
+              bindtap="selectExperience"
+              data-exp="none"
+            >无经验</view>
+            <view
+              class="exp-btn {{experience === 'intermediate' ? 'active' : ''}}"
+              bindtap="selectExperience"
+              data-exp="intermediate"
+            >有经验</view>
+            <view
+              class="exp-btn {{experience === 'experienced' ? 'active' : ''}}"
+              bindtap="selectExperience"
+              data-exp="experienced"
+            >经验丰富</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="btn-area">
+      <button
+        class="weui-btn {{canSubmit ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
+        bindtap="doSubmit"
+        disabled="{{!canSubmit}}"
+      >完成</button>
+    </view>
+  </view>
+</view>
