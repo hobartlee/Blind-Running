@@ -1,129 +1,200 @@
-/* WeUI 个人信息页 */
+/* 个人信息页 */
 .page {
   min-height: 100vh;
-  background: #F7F7F7;
+  background: linear-gradient(180deg, #FFF9F5 0%, #FFF5F0 100%);
+  position: relative;
+  overflow: hidden;
 }
 
-/* 头部 */
-.header {
-  display: flex;
-  align-items: center;
-  padding: 80rpx 32rpx 24rpx;
-  background: #fff;
+/* 背景 */
+.bg-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
 }
 
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.bg-circle-1 {
+  width: 500rpx;
+  height: 500rpx;
+  background: linear-gradient(135deg, #FFE4D6 0%, #FFDDD0 100%);
+  top: -200rpx;
+  right: -150rpx;
+}
+
+.bg-circle-2 {
+  width: 300rpx;
+  height: 300rpx;
+  background: linear-gradient(135deg, #E8F4FF 0%, #D6EDFF 100%);
+  bottom: 200rpx;
+  left: -100rpx;
+}
+
+/* 顶部 */
+.hero {
+  padding: 100rpx 48rpx 40rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 10rpx 28rpx;
+  background: linear-gradient(135deg, #FF8C69 0%, #FF6B5B 100%);
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 700;
+  border-radius: 100rpx;
+  margin-bottom: 20rpx;
+}
+
+.hero-title {
+  font-size: 52rpx;
+  font-weight: 900;
+  color: #2D2D2D;
+  margin-bottom: 10rpx;
+}
+
+.hero-subtitle {
+  font-size: 28rpx;
+  color: #8C8C8C;
+}
+
+/* 返回按钮 */
 .back-btn {
-  font-size: 60rpx;
+  font-size: 64rpx;
   color: #333;
-  padding: 0 8rpx;
-}
-
-.header-title {
-  flex: 1;
-  text-align: center;
-  font-size: 32rpx;
-  font-weight: 500;
-  color: #333;
-  padding-right: 68rpx;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 24rpx;
+  display: inline-block;
 }
 
 /* 内容 */
 .content {
-  padding: 32rpx 32rpx 60rpx;
+  padding: 0 48rpx 60rpx;
+  position: relative;
+  z-index: 1;
 }
 
-/* 头像预览 */
-.avatar-preview {
+/* 字段卡片 */
+.field-card {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 32rpx;
-}
-
-.avatar-circle {
-  width: 140rpx;
-  height: 140rpx;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #FFE4D6 0%, #FFD6C4 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
   margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
 }
 
-.avatar-icon {
-  font-size: 64rpx;
+.field-icon {
+  font-size: 48rpx;
+  margin-right: 20rpx;
+  margin-top: 2rpx;
 }
 
-.avatar-hint {
-  font-size: 26rpx;
-  color: #8C8C8C;
+.field-group {
+  flex: 1;
 }
 
-/* 性别选择 */
-.gender-selector {
+.field-label {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #999;
+  margin-bottom: 12rpx;
+}
+
+.field-input {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  padding: 0;
+  width: 100%;
+}
+
+.placeholder {
+  color: #ccc;
+  font-weight: 400;
+}
+
+/* 性别 */
+.gender-row {
   display: flex;
-  gap: 20rpx;
-  padding: 8rpx 0;
+  gap: 16rpx;
 }
 
 .gender-btn {
   flex: 1;
-  height: 72rpx;
-  background: #F8F8F8;
-  border-radius: 36rpx;
+  height: 80rpx;
+  background: #f5f5f5;
+  border-radius: 16rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8rpx;
-}
-
-.gender-btn.active {
-  background: #FFF0EA;
-  border: 2rpx solid #FF8C69;
-}
-
-.gender-icon {
   font-size: 28rpx;
+  font-weight: 700;
   color: #999;
 }
 
-.gender-btn.active .gender-icon {
-  color: #FF6B5B;
+.gender-btn.active {
+  background: #07C160;
+  color: #fff;
 }
 
-.gender-text {
-  font-size: 26rpx;
-  font-weight: 500;
-  color: #666;
-}
-
-.gender-btn.active .gender-text {
-  color: #FF6B5B;
-}
-
-/* 经验选择 */
-.experience-selector {
+/* 经验 */
+.exp-row {
   display: flex;
-  flex-wrap: wrap;
   gap: 12rpx;
-  padding: 8rpx 0;
 }
 
 .exp-btn {
-  padding: 12rpx 20rpx;
-  background: #F8F8F8;
-  border-radius: 100rpx;
+  flex: 1;
+  height: 72rpx;
+  background: #f5f5f5;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 24rpx;
+  font-weight: 600;
   color: #666;
 }
 
 .exp-btn.active {
-  background: linear-gradient(135deg, #FF8C69 0%, #FF6B5B 100%);
+  background: #07C160;
   color: #fff;
 }
 
-/* 按钮区域 */
-.btn-area {
-  margin-top: 48rpx;
+/* 按钮 */
+.btn {
+  width: 100%;
+  height: 96rpx;
+  background: #e8e8e8;
+  color: #fff;
+  border-radius: 100rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin-top: 24rpx;
+  transition: background 0.2s;
+}
+
+.btn-active {
+  background: #07C160;
+}
+
+.btn::after {
+  border: none;
 }

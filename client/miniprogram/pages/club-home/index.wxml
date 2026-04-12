@@ -98,6 +98,7 @@
               <view class="member-meta">{{item.applyTime}} · {{item.experience}}</view>
             </view>
             <view class="btn-approve" bindtap="approveMember" data-id="{{item.id}}">通过</view>
+            <view class="btn-reject" bindtap="rejectMember" data-id="{{item.id}}">拒绝</view>
           </view>
         </view>
 

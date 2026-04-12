@@ -1,33 +1,41 @@
 const app = getApp()
+const api = require('../../utils/api.js')
 
 Page({
   data: {
     clubName: '我的跑团',
     memberCount: 0,
     pendingCount: 0,
-    activityCount: 36,
-    helpedCount: 89
+    activityCount: 0,
+    helpedCount: 0,
+    isLoading: false
   },
 
   onShow() {
-    const clubInfo = app.globalData.clubInfo
-    if (clubInfo && clubInfo.name) {
-      this.setData({ clubName: clubInfo.name })
-    }
-
-    // 加载跑团数据
     this.loadClubData()
   },
 
   loadClubData() {
-    // 从本地存储加载
-    const clubData = wx.getStorageSync('clubData') || {}
+    this.setData({ isLoading: true })
+    const phone = wx.getStorageSync('phone')
+    if (!phone) {
+      this.setData({ isLoading: false })
+      return
+    }
 
-    this.setData({
-      memberCount: clubData.memberCount || 0,
-      pendingCount: clubData.pendingCount || 0,
-      activityCount: clubData.totalActivities || 36,
-      helpedCount: clubData.totalHelped || 89
+    api.getClub(phone).then(club => {
+      app.globalData.clubInfo = club
+      this.setData({
+        clubName: club.name || '我的跑团',
+        memberCount: club.member_count || 0,
+        pendingCount: (club.pendingApplications || []).length,
+        activityCount: club.total_activities || 0,
+        helpedCount: club.total_helped || 0,
+        isLoading: false
+      })
+    }).catch(err => {
+      this.setData({ isLoading: false })
+      console.error('getClub error:', err)
     })
   },
 

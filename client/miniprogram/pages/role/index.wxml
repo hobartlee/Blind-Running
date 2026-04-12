@@ -8,7 +8,6 @@
 
   <!-- 顶部区域 -->
   <view class="hero">
-    <view class="hero-badge">助盲跑</view>
     <view class="hero-title">让每一步<view class="highlight">都有意义</view></view>
     <view class="hero-subtitle">连接视障跑者与志愿者，用奔跑传递温暖</view>
   </view>
@@ -78,6 +77,6 @@
 
   <!-- 底部信息 -->
   <view class="footer">
-    <view class="footer-text">已有 <text class="highlight-text">1,280+</text> 人加入</view>
+    <view class="footer-text">已有 <text class="highlight-text">{{totalUsers}}+</text> 人加入</view>
   </view>
 </view>

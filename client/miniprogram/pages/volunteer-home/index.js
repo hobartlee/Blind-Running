@@ -1,4 +1,5 @@
 const app = getApp()
+const api = require('../../utils/api.js')
 
 Page({
   data: {
@@ -9,40 +10,89 @@ Page({
     hours: 0,
     filter: 'all',
     filteredActivities: [],
-    activities: []
+    activities: [],
+    isLoading: false
   },
 
   onShow() {
-    // 从全局获取跑团信息
-    const joinedClub = app.globalData.joinedClub
-    const auditStatus = app.globalData.auditStatus
-
-    if (joinedClub) {
-      this.setData({
-        joinedClub,
-        clubName: joinedClub.name,
-        auditStatus: auditStatus || 'approved'
-      })
-    } else {
-      this.setData({
-        joinedClub: null,
-        auditStatus: null
-      })
-    }
-
-    // 加载活动数据
-    this.loadActivities()
+    this.loadData()
   },
 
-  // 加载活动数据
-  loadActivities() {
-    // TODO: 从API或本地存储加载真实数据
-    const activities = wx.getStorageSync('volunteerActivities') || []
+  loadData() {
+    this.setData({ isLoading: true })
 
+    // 先获取当前用户信息，包含club_id
+    const phone = wx.getStorageSync('phone')
+    const userType = wx.getStorageSync('userType')
+
+    if (!phone) {
+      this.setData({ isLoading: false })
+      return
+    }
+
+    // 获取用户详情
+    api.getUsers(userType).then(users => {
+      const currentUser = (users || []).find(u => u.phone === phone)
+      if (currentUser && currentUser.club_id) {
+        // 用户已有俱乐部
+        app.globalData.joinedClub = { id: currentUser.club_id, name: currentUser.club_name }
+        app.globalData.auditStatus = 'approved'
+
+        this.setData({
+          joinedClub: { id: currentUser.club_id, name: currentUser.club_name },
+          clubName: currentUser.club_name,
+          auditStatus: 'approved'
+        })
+
+        // 加载俱乐部活动
+        this.loadActivities(currentUser.club_id)
+      } else {
+        this.setData({
+          joinedClub: null,
+          auditStatus: null,
+          activities: [],
+          activityCount: 0,
+          isLoading: false
+        })
+      }
+    }).catch(() => {
+      // API失败时使用本地数据
+      this.loadActivitiesLocal()
+    })
+  },
+
+  // 从API加载活动
+  loadActivities(clubId) {
+    api.getActivities(clubId).then(activities => {
+      const formatted = (activities || []).map(a => ({
+        id: a.id,
+        title: a.title,
+        date: a.date_time ? a.date_time.split('T')[0] : '',
+        time: a.date_time ? a.date_time.split('T')[1]?.substring(0, 5) : '',
+        location: a.location,
+        status: a.status || 'upcoming',
+        signupCount: a.signup_count || 0
+      }))
+
+      this.setData({
+        activities: formatted,
+        activityCount: formatted.length,
+        isLoading: false
+      }, () => {
+        this.applyFilter()
+      })
+    }).catch(() => {
+      this.loadActivitiesLocal()
+    })
+  },
+
+  // 从本地存储加载活动（备用）
+  loadActivitiesLocal() {
+    const activities = wx.getStorageSync('volunteerActivities') || []
     this.setData({
       activities,
       activityCount: activities.length,
-      hours: 0 // TODO: 从实际数据计算
+      isLoading: false
     }, () => {
       this.applyFilter()
     })
@@ -125,7 +175,7 @@ Page({
 
   // 下拉刷新
   onPullDownRefresh() {
-    this.loadActivities()
+    this.loadData()
     setTimeout(() => {
       wx.stopPullDownRefresh()
     }, 500)

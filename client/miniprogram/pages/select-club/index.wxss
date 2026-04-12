@@ -1,73 +1,101 @@
-/* WeUI 选择跑团页 */
+/* 选择跑团页 */
 .page {
   min-height: 100vh;
-  background: #F7F7F7;
+  background: linear-gradient(180deg, #F0FFF5 0%, #E8F8F0 100%);
+  position: relative;
+  overflow: hidden;
 }
 
-/* 头部 */
-.header {
-  display: flex;
-  align-items: center;
-  padding: 80rpx 32rpx 24rpx;
-  background: #fff;
+/* 背景 */
+.bg-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
 }
 
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.bg-circle-1 {
+  width: 500rpx;
+  height: 500rpx;
+  background: linear-gradient(135deg, #D4F0E5 0%, #E8F8F0 100%);
+  top: -200rpx;
+  left: -150rpx;
+}
+
+.bg-circle-2 {
+  width: 300rpx;
+  height: 300rpx;
+  background: linear-gradient(135deg, #FFE4D6 0%, #FFDDD0 100%);
+  bottom: 200rpx;
+  right: -100rpx;
+}
+
+/* 顶部 */
+.hero {
+  padding: 100rpx 48rpx 40rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 10rpx 28rpx;
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 700;
+  border-radius: 100rpx;
+  margin-bottom: 20rpx;
+}
+
+.hero-title {
+  font-size: 52rpx;
+  font-weight: 900;
+  color: #2D2D2D;
+  margin-bottom: 10rpx;
+}
+
+.hero-subtitle {
+  font-size: 28rpx;
+  color: #8C8C8C;
+}
+
+/* 返回按钮 */
 .back-btn {
-  font-size: 60rpx;
+  font-size: 64rpx;
   color: #333;
-  padding: 0 8rpx;
-}
-
-.header-title {
-  flex: 1;
-  text-align: center;
-  font-size: 32rpx;
-  font-weight: 500;
-  color: #333;
-  padding-right: 68rpx;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 24rpx;
+  display: inline-block;
 }
 
 /* 内容 */
 .content {
-  padding: 32rpx 32rpx 60rpx;
+  padding: 0 48rpx 60rpx;
+  position: relative;
+  z-index: 1;
 }
 
-/* 介绍区域 */
-.intro-section {
-  text-align: center;
-  margin-bottom: 32rpx;
-}
-
-.intro-icon {
-  font-size: 64rpx;
-  margin-bottom: 12rpx;
-}
-
-.intro-title {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 8rpx;
-}
-
-.intro-desc {
-  font-size: 26rpx;
-  color: #666;
-}
-
-/* 跑团列表 */
-.club-list {
-  margin-bottom: 32rpx;
-}
-
+/* 跑团卡片 */
 .club-card {
   display: flex;
   align-items: center;
   background: #fff;
-  border: 2rpx solid #E8E8E8;
-  border-radius: 16rpx;
-  padding: 24rpx;
+  border-radius: 24rpx;
+  padding: 28rpx;
   margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+  border: 2rpx solid transparent;
+  transition: all 0.2s;
 }
 
 .club-card.selected {
@@ -78,14 +106,14 @@
 .club-avatar {
   width: 80rpx;
   height: 80rpx;
-  border-radius: 50%;
+  border-radius: 20rpx;
   background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32rpx;
-  font-weight: bold;
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #fff;
   margin-right: 20rpx;
 }
 
@@ -94,10 +122,10 @@
 }
 
 .club-name {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 4rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2D2D2D;
+  margin-bottom: 6rpx;
 }
 
 .club-meta {
@@ -106,19 +134,38 @@
 }
 
 .club-check {
-  width: 40rpx;
-  height: 40rpx;
+  width: 48rpx;
+  height: 48rpx;
   border-radius: 50%;
   background: #07C160;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20rpx;
-  font-weight: bold;
+  font-size: 24rpx;
 }
 
-/* 按钮区域 */
-.btn-area {
-  margin-top: 32rpx;
+/* 按钮 */
+.btn {
+  width: 100%;
+  height: 96rpx;
+  background: #e8e8e8;
+  color: #fff;
+  border-radius: 100rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin-top: 24rpx;
+  transition: background 0.2s;
+}
+
+.btn-active {
+  background: #07C160;
+}
+
+.btn::after {
+  border: none;
 }

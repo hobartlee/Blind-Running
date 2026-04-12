@@ -6,7 +6,6 @@
 
   <!-- 头部 -->
   <view class="header">
-    <view class="back-btn" bindtap="goBack">‹</view>
     <view class="title">我的</view>
   </view>
 
@@ -40,9 +39,14 @@
         </view>
         <view class="info-row">
           <view class="info-label">手机号</view>
-          <view class="info-value">{{maskedPhone || '未填写'}}</view>
+          <view class="info-value">{{phone || '未填写'}}</view>
         </view>
       </view>
+    </view>
+
+    <!-- 退出登录 -->
+    <view class="logout-section anim-slide-up" style="animation-delay: 0.2s">
+      <button class="logout-btn" bindtap="logout">退出登录</button>
     </view>
   </view>
 

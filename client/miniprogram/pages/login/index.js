@@ -15,6 +15,26 @@ Page({
   },
 
   onLoad() {
+    // 如果已登录，直接跳转到首页
+    const isLoggedIn = wx.getStorageSync('isLoggedIn')
+    if (isLoggedIn) {
+      const userType = wx.getStorageSync('userType') || app.globalData.userType
+      let homePage = '/pages/personal-info/index'
+      switch (userType) {
+        case 'blind':
+          homePage = '/pages/blind-home/index'
+          break
+        case 'volunteer':
+          homePage = '/pages/volunteer-home/index'
+          break
+        case 'group':
+          homePage = '/pages/club-home/index'
+          break
+      }
+      wx.redirectTo({ url: homePage })
+      return
+    }
+
     const userType = app.globalData.userType || 'volunteer'
     const roleNames = {
       blind: '视障跑者',
@@ -108,63 +128,60 @@ Page({
 
     wx.showLoading({ title: '登录中...', mask: true })
 
-    // TODO: 调用后端验证验证码
-    // api.verifyCode(phone, code).then(() => {
-    //   this.completeLogin(phone)
-    // }).catch(err => {
-    //   wx.hideLoading()
-    //   wx.showToast({ title: '验证码错误', icon: 'none' })
-    // })
-
-    // 演示：验证码正确
-    setTimeout(() => {
+    // 演示模式：验证123456
+    if (code !== DEMO_CODE) {
       wx.hideLoading()
-      if (code === DEMO_CODE) {
-        wx.showToast({ title: '登录成功', icon: 'success' })
-        this.completeLogin(phone)
-      } else {
-        wx.showToast({ title: '验证码错误', icon: 'none' })
-      }
+      wx.showToast({ title: '验证码错误', icon: 'none' })
+      return
+    }
+
+    // 调用后端登录API
+    const userType = app.globalData.userType
+    api.login(phone, userType).then(res => {
+      wx.hideLoading()
+      wx.showToast({ title: '登录成功', icon: 'success' })
+      this.completeLogin(phone, res)
+    }).catch(() => {
+      // 后端不可用时，使用本地模式登录
+      wx.hideLoading()
+      wx.showToast({ title: '登录成功（离线模式）', icon: 'success' })
+      this.completeLoginLocal(phone)
+    })
+  },
+
+  // 完成登录（后端模式）
+  completeLogin(phone, user) {
+    wx.setStorageSync('phone', phone)
+    wx.setStorageSync('isLoggedIn', true)
+    wx.setStorageSync('userId', user.id)
+    wx.setStorageSync('isAdmin', user.isAdmin || false)
+
+    // 保存用户ID到全局
+    app.globalData.userId = user.id
+
+    // 新用户计数+1（通过后端API的isNew字段判断）
+    if (user.isNew) {
+      const total = wx.getStorageSync('totalUsers') || 0
+      wx.setStorageSync('totalUsers', total + 1)
+    }
+
+    setTimeout(() => {
+      wx.redirectTo({
+        url: '/pages/personal-info/index'
+      })
     }, 500)
   },
 
-  // 完成登录
-  completeLogin(phone) {
+  // 完成登录（离线本地模式）
+  completeLoginLocal(phone) {
     wx.setStorageSync('phone', phone)
     wx.setStorageSync('isLoggedIn', true)
+    wx.setStorageSync('userId', 'local_' + Date.now())
+    wx.setStorageSync('isAdmin', false)
 
-    const userType = app.globalData.userType
-
-    // 保存用户
-    if (userType === 'blind') {
-      const blindUsers = wx.getStorageSync('blindUsers') || []
-      const existIndex = blindUsers.findIndex(u => u.phone === phone)
-      if (existIndex >= 0) {
-        blindUsers[existIndex].lastLogin = new Date().toLocaleString()
-      } else {
-        blindUsers.push({
-          id: Date.now(),
-          phone,
-          createTime: new Date().toLocaleString(),
-          lastLogin: new Date().toLocaleString()
-        })
-      }
-      wx.setStorageSync('blindUsers', blindUsers)
-    } else if (userType === 'volunteer') {
-      const volunteerUsers = wx.getStorageSync('volunteerUsers') || []
-      const existIndex = volunteerUsers.findIndex(u => u.phone === phone)
-      if (existIndex >= 0) {
-        volunteerUsers[existIndex].lastLogin = new Date().toLocaleString()
-      } else {
-        volunteerUsers.push({
-          id: Date.now(),
-          phone,
-          createTime: new Date().toLocaleString(),
-          lastLogin: new Date().toLocaleString()
-        })
-      }
-      wx.setStorageSync('volunteerUsers', volunteerUsers)
-    }
+    // 本地新用户计数
+    const total = wx.getStorageSync('totalUsers') || 0
+    wx.setStorageSync('totalUsers', total + 1)
 
     setTimeout(() => {
       wx.redirectTo({

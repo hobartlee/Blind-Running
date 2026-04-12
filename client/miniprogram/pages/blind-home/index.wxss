@@ -41,7 +41,7 @@
 
 /* ===== 内容区域 ===== */
 .content {
-  padding: 0 40rpx 160rpx;
+  padding: 24rpx 40rpx 160rpx;
 }
 
 /* ===== 用户卡片 ===== */
@@ -51,7 +51,6 @@
   background: #fff;
   border-radius: 28rpx;
   padding: 28rpx;
-  margin-top: -20rpx;
   margin-bottom: 32rpx;
   box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.08);
   position: relative;

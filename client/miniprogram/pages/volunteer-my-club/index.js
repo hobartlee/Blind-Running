@@ -1,39 +1,52 @@
 const app = getApp()
+const api = require('../../utils/api.js')
 
 Page({
   data: {
-    clubName: '朝阳公园跑团',
-    clubLocation: '北京朝阳',
-    memberCount: 128,
-    activityCount: 36,
-    helpedCount: 89,
-    activities: [
-      {
-        id: 1,
-        title: '周六朝阳公园例跑',
-        dateText: '4月5日 07:00',
-        location: '朝阳公园东门',
-        signups: 3,
-        status: 'upcoming',
-        statusText: '进行中'
-      },
-      {
-        id: 2,
-        title: '周日奥森长跑',
-        dateText: '4月6日 06:30',
-        location: '奥森南门',
-        signups: 1,
-        status: 'pending',
-        statusText: '待确认'
-      }
-    ]
+    clubName: '',
+    clubLocation: '',
+    memberCount: 0,
+    activityCount: 0,
+    helpedCount: 0,
+    activities: [],
+    isLoading: false
   },
 
   onShow() {
+    this.loadData()
+  },
+
+  loadData() {
+    this.setData({ isLoading: true })
     const joinedClub = app.globalData.joinedClub
-    if (joinedClub) {
-      this.setData({ clubName: joinedClub.name })
+
+    if (!joinedClub || !joinedClub.id) {
+      this.setData({ isLoading: false })
+      return
     }
+
+    // 按ID获取跑团详情
+    api.getClubById(joinedClub.id).then(club => {
+      this.setData({
+        clubName: club.name || '',
+        clubLocation: club.location || '',
+        memberCount: club.member_count || 0,
+        activityCount: club.total_activities || 0,
+        helpedCount: club.total_helped || 0,
+        activities: (club.activities || []).map(a => ({
+          id: a.id,
+          title: a.title,
+          dateText: a.date_time ? a.date_time.replace('T', ' ').substring(0, 16) : '',
+          location: a.location,
+          signups: a.signup_count || 0,
+          status: a.status || 'upcoming'
+        })),
+        isLoading: false
+      })
+    }).catch(err => {
+      this.setData({ isLoading: false })
+      console.error('getClubById error:', err)
+    })
   },
 
   goBack() {

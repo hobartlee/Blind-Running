@@ -1,4 +1,5 @@
 const app = getApp()
+const api = require('../../utils/api.js')
 
 Page({
   data: {
@@ -56,11 +57,24 @@ Page({
     app.globalData.userInfo = userInfo
     wx.setStorageSync('userInfo', userInfo)
 
-    wx.showToast({ title: '保存成功', icon: 'success' })
+    // 同步到后端
+    const phone = wx.getStorageSync('phone')
+    const userType = wx.getStorageSync('userType')
 
-    setTimeout(() => {
-      wx.navigateBack()
-    }, 500)
+    wx.showLoading({ title: '保存中...', mask: true })
+    api.updateUser(phone, userType, { name, gender, experience }).then(() => {
+      wx.hideLoading()
+      wx.showToast({ title: '保存成功', icon: 'success' })
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 500)
+    }).catch(err => {
+      wx.hideLoading()
+      wx.showToast({ title: '保存成功', icon: 'success' })
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 500)
+    })
   },
 
   goBack() {

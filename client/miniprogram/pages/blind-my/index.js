@@ -29,7 +29,7 @@ Page({
     const userInfo = app.globalData.userInfo || {}
     const phone = wx.getStorageSync('phone') || ''
 
-    // 掩码手机号
+    // 掩码手机号（用于卡片头部显示）
     const maskedPhone = phone ? phone.slice(0, 3) + '****' + phone.slice(-4) : ''
 
     // 性别文本
@@ -41,17 +41,14 @@ Page({
     this.setData({
       userInfo,
       maskedPhone,
+      phone, // 完整手机号
       genderText,
       experienceText
     })
   },
 
-  goBack() {
-    wx.navigateBack()
-  },
-
   goToHome() {
-    wx.reLaunch({
+    wx.navigateTo({
       url: '/pages/blind-home/index'
     })
   },
@@ -60,6 +57,26 @@ Page({
   editProfile() {
     wx.navigateTo({
       url: '/pages/personal-info/index'
+    })
+  },
+
+  // 退出登录
+  logout() {
+    wx.showModal({
+      title: '提示',
+      content: '确定要退出登录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          // 清除登录状态
+          wx.clearStorageSync()
+          app.globalData.userType = null
+          app.globalData.userInfo = null
+          // 跳转到角色选择页
+          wx.redirectTo({
+            url: '/pages/role/index'
+          })
+        }
+      }
     })
   }
 })

@@ -1,3 +1,6 @@
+const app = getApp()
+const api = require('../../utils/api.js')
+
 Page({
   data: {
     date: '',
@@ -42,7 +45,7 @@ Page({
   },
 
   doSubmit() {
-    const { date, time, location } = this.data
+    const { date, time, location, experience } = this.data
 
     if (!location) {
       wx.showToast({ title: '请输入集合地点', icon: 'none' })
@@ -59,15 +62,34 @@ Page({
       return
     }
 
-    // TODO: 调用后端创建活动
-    wx.showToast({
-      title: '活动发布成功',
-      icon: 'success'
-    })
+    wx.showLoading({ title: '发布中...', mask: true })
 
-    setTimeout(() => {
-      wx.navigateBack()
-    }, 1500)
+    // 获取俱乐部信息
+    const joinedClub = app.globalData.joinedClub
+    if (!joinedClub || !joinedClub.id) {
+      wx.hideLoading()
+      wx.showToast({ title: '请先加入跑团', icon: 'none' })
+      return
+    }
+
+    const dateTime = `${date} ${time}:00`
+
+    api.createActivity(joinedClub.id, joinedClub.name, {
+      title: `${date} ${time} 跑步活动`,
+      description: `经验要求: ${experience}`,
+      dateTime,
+      location
+    }).then(() => {
+      wx.hideLoading()
+      wx.showToast({ title: '活动发布成功', icon: 'success' })
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 1500)
+    }).catch(err => {
+      wx.hideLoading()
+      wx.showToast({ title: '发布失败', icon: 'none' })
+      console.error('createActivity error:', err)
+    })
   },
 
   goBack() {

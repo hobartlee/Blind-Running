@@ -1,0 +1,8 @@
+{
+  "name": "bubu-miniprogram",
+  "version": "1.0.0",
+  "description": "步步有伴小程序",
+  "dependencies": {
+    "weui-miniprogram": "^1.0.8"
+  }
+}

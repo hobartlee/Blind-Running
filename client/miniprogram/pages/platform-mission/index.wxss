@@ -1,4 +1,4 @@
-/* ===== 页面容器 ===== */
+/* 服务须知页 - 三套配色 */
 .page {
   min-height: 100vh;
   background: linear-gradient(180deg, #FFF9F5 0%, #FFF5F0 100%);
@@ -6,7 +6,17 @@
   overflow: hidden;
 }
 
-/* ===== 背景装饰 ===== */
+/* 志愿者配色 */
+.page-vol {
+  background: linear-gradient(180deg, #F0FFF5 0%, #E8F8F0 100%);
+}
+
+/* 跑团配色 */
+.page-group {
+  background: linear-gradient(180deg, #F0F5FF 0%, #EEF2FF 100%);
+}
+
+/* 背景 */
 .bg-decoration {
   position: absolute;
   top: 0;
@@ -19,240 +29,213 @@
 .bg-circle {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.4;
+  opacity: 0.5;
 }
 
 .bg-circle-1 {
-  width: 400rpx;
-  height: 400rpx;
-  background: linear-gradient(135deg, #FFE4D6 0%, #FFD6C4 100%);
-  top: -100rpx;
-  left: -100rpx;
+  width: 500rpx;
+  height: 500rpx;
+  background: linear-gradient(135deg, #FFE4D6 0%, #FFDDD0 100%);
+  top: -200rpx;
+  left: -150rpx;
 }
 
 .bg-circle-2 {
   width: 300rpx;
   height: 300rpx;
-  background: linear-gradient(135deg, #E8F8F0 0%, #D4F0E5 100%);
+  background: linear-gradient(135deg, #E8F4FF 0%, #D6EDFF 100%);
   bottom: 200rpx;
-  right: -80rpx;
+  right: -100rpx;
 }
 
-/* ===== 头部 ===== */
-.header {
-  display: flex;
-  align-items: center;
-  padding: 80rpx 40rpx 20rpx;
+.page-vol .bg-circle-1 {
+  background: linear-gradient(135deg, #D4F0E5 0%, #E8F8F0 100%);
+}
+
+.page-vol .bg-circle-2 {
+  background: linear-gradient(135deg, #FFE4D6 0%, #FFDDD0 100%);
+}
+
+.page-group .bg-circle-1 {
+  background: linear-gradient(135deg, #D6E4FF 0%, #D6EDFF 100%);
+}
+
+.page-group .bg-circle-2 {
+  background: linear-gradient(135deg, #D4F0E5 0%, #E8F8F0 100%);
+}
+
+/* 顶部 */
+.hero {
+  padding: 100rpx 48rpx 40rpx;
   position: relative;
   z-index: 1;
 }
 
-.back-btn {
-  font-size: 64rpx;
-  color: #2D2D2D;
-  padding: 0 16rpx;
-  font-weight: 300;
-  line-height: 1;
-}
-
-.header-title {
-  flex: 1;
-  text-align: center;
-  font-size: 36rpx;
-  font-weight: 700;
-  color: #2D2D2D;
-  padding-right: 80rpx;
-}
-
-/* ===== 内容区域 ===== */
-.content {
-  padding: 0 48rpx;
-  position: relative;
-  z-index: 1;
-}
-
-/* ===== 步骤指示器 ===== */
-.step-indicator {
-  display: flex;
-  justify-content: center;
-  gap: 16rpx;
-  padding: 20rpx 0 40rpx;
-}
-
-.step-dot {
-  width: 16rpx;
-  height: 16rpx;
-  border-radius: 8rpx;
-  background: #E8E8E8;
-}
-
-.step-dot.active {
-  width: 48rpx;
+.hero-badge {
+  display: inline-block;
+  padding: 10rpx 28rpx;
   background: linear-gradient(135deg, #FF8C69 0%, #FF6B5B 100%);
-}
-
-.step-dot.completed {
-  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
-}
-
-/* ===== 使命横幅 ===== */
-.mission-banner {
-  text-align: center;
-  padding: 40rpx 30rpx;
-  background: linear-gradient(135deg, #FFF9F5 0%, #FFF5F0 100%);
-  border-radius: 28rpx;
-  margin-bottom: 32rpx;
-}
-
-.mission-icon {
-  font-size: 100rpx;
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 700;
+  border-radius: 100rpx;
   margin-bottom: 20rpx;
 }
 
-.mission-title {
+.page-vol .hero-badge {
+  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+}
+
+.page-group .hero-badge {
+  background: linear-gradient(135deg, #4A90FF 0%, #2563FF 100%);
+}
+
+.hero-title {
   font-size: 44rpx;
-  font-weight: 800;
+  font-weight: 900;
   color: #2D2D2D;
-  margin-bottom: 16rpx;
+  line-height: 1.3;
 }
 
-.mission-desc {
+/* 返回按钮 */
+.back-btn {
+  font-size: 64rpx;
+  color: #333;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 24rpx;
+  display: inline-block;
+}
+
+/* 内容 */
+.content {
+  padding: 0 48rpx 60rpx;
+  position: relative;
+  z-index: 1;
+}
+
+/* 介绍卡片 */
+.intro-card {
   font-size: 28rpx;
-  color: #8C8C8C;
-  line-height: 1.6;
+  color: #666;
+  line-height: 1.8;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
 }
 
-/* ===== 准则卡片 ===== */
+/* 准则卡片 */
 .guide-card {
   background: #fff;
-  border-radius: 28rpx;
-  padding: 32rpx;
-  margin-bottom: 32rpx;
-  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.06);
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
 }
 
 .guide-title {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #2D2D2D;
-  margin-bottom: 24rpx;
-  padding-left: 20rpx;
-  border-left: 6rpx solid #FF8C69;
-}
-
-.guide-list {
-  padding-left: 0;
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 20rpx;
 }
 
 .guide-item {
-  font-size: 28rpx;
-  color: #666;
+  display: flex;
+  align-items: flex-start;
   padding: 14rpx 0;
-  padding-left: 36rpx;
-  position: relative;
-  border-bottom: 1px solid #F5F5F5;
+  border-bottom: 1rpx solid #f5f5f5;
 }
 
 .guide-item:last-child {
   border-bottom: none;
 }
 
-.guide-item::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
+.guide-dot {
   color: #07C160;
-  font-weight: bold;
-  font-size: 26rpx;
+  font-size: 28rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
 }
 
-/* ===== 同意条款 ===== */
-.agree-box {
+.guide-text {
+  font-size: 28rpx;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* 同意 */
+.agree-row {
   display: flex;
-  align-items: flex-start;
-  gap: 20rpx;
-  padding: 28rpx;
-  background: #fff;
-  border: 2rpx solid #E8E8E8;
-  border-radius: 20rpx;
-  margin-bottom: 32rpx;
-  transition: all 0.3s ease;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
 }
 
-.agree-box.checked {
-  border-color: #07C160;
-  background: linear-gradient(135deg, #F0FFF5 0%, #E8F8F0 100%);
-}
-
-.agree-checkbox {
+.agree-circle {
   width: 44rpx;
   height: 44rpx;
-  border: 2rpx solid #D0D0D0;
-  border-radius: 12rpx;
+  border: 2rpx solid #ddd;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: #fff;
   flex-shrink: 0;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
 }
 
-.agree-box.checked .agree-checkbox {
+.agree-row.checked .agree-circle {
   background: #07C160;
   border-color: #07C160;
+}
+
+.page-blind .agree-row.checked .agree-circle {
+  background: #FF8C69;
+  border-color: #FF8C69;
+}
+
+.page-group .agree-row.checked .agree-circle {
+  background: #4A90FF;
+  border-color: #4A90FF;
 }
 
 .agree-text {
   font-size: 28rpx;
   color: #666;
-  line-height: 1.6;
-  flex: 1;
 }
 
-/* ===== 按钮 ===== */
-.btn-wrapper {
-  padding-bottom: 60rpx;
-}
-
-.btn-primary {
+/* 按钮 */
+.btn {
   width: 100%;
   height: 96rpx;
-  background: linear-gradient(135deg, #07C160 0%, #05A050 100%);
+  background: #e8e8e8;
   color: #fff;
-  border-radius: 48rpx;
+  border-radius: 100rpx;
+  font-size: 32rpx;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32rpx;
-  font-weight: 600;
-  box-shadow: 0 8rpx 32rpx rgba(7, 193, 96, 0.3);
-  transition: all 0.3s ease;
+  border: none;
+  transition: background 0.2s;
 }
 
-.btn-primary:active {
-  transform: scale(0.98);
+.btn-active {
+  background: #07C160;
 }
 
-.btn-primary.disabled {
-  background: #E8E8E8;
-  color: #B0B0B0;
-  box-shadow: none;
+.page-blind .btn-active {
+  background: #FF8C69;
 }
 
-/* ===== 动画 ===== */
-.anim-slide-up {
-  animation: slideUp 0.5s ease-out forwards;
-  opacity: 0;
+.page-group .btn-active {
+  background: #4A90FF;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40rpx);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.btn::after {
+  border: none;
 }

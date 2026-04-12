@@ -1,74 +1,66 @@
 <view class="page">
-  <!-- 背景 -->
-  <view class="bg-decoration"></view>
-
-  <!-- 头部 -->
-  <view class="header">
-    <view class="back-btn" bindtap="goBack">‹</view>
-    <view class="header-title">手机号登录</view>
+  <!-- 背景装饰 -->
+  <view class="bg-decoration">
+    <view class="bg-circle bg-circle-1"></view>
+    <view class="bg-circle bg-circle-2"></view>
   </view>
 
-  <!-- 内容 -->
+  <!-- 顶部 -->
+  <view class="hero">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <view class="hero-title">手机号登录</view>
+    <view class="hero-subtitle">登录后即可使用完整功能</view>
+  </view>
+
+  <!-- 卡片 -->
   <view class="content">
     <!-- 步骤1: 手机号 -->
-    <view class="step-content {{step === 1 ? 'active' : ''}}">
-      <view class="weui-cells weui-cells_form">
-        <view class="weui-cell">
-          <view class="weui-cell__hd">
-            <text class="weui-label">+86</text>
-          </view>
-          <view class="weui-cell__bd">
-            <input
-              class="weui-input"
-              type="number"
-              maxlength="11"
-              placeholder="请输入手机号"
-              bindinput="onPhoneInput"
-              value="{{phone}}"
-            />
-          </view>
-        </view>
+    <view class="card" wx:if="{{step === 1}}">
+      <view class="card-icon">📱</view>
+      <view class="card-label">手机号</view>
+      <view class="phone-row">
+        <text class="phone-prefix">+86</text>
+        <input
+          class="phone-input"
+          type="number"
+          maxlength="11"
+          placeholder="请输入手机号"
+          placeholder-class="placeholder"
+          bindinput="onPhoneInput"
+          value="{{phone}}"
+        />
       </view>
-
-      <view class="btn-area">
-        <button
-          class="weui-btn {{phone.length === 11 ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
-          bindtap="sendCode"
-          disabled="{{phone.length !== 11}}"
-        >获取验证码</button>
-      </view>
+      <button
+        class="btn {{phone.length === 11 ? 'btn-active' : ''}}"
+        bindtap="sendCode"
+        disabled="{{phone.length !== 11}}"
+      >获取验证码</button>
     </view>
 
     <!-- 步骤2: 验证码 -->
-    <view class="step-content {{step === 2 ? 'active' : ''}}">
-      <view class="page-desc">验证码已发送至 {{maskedPhone}}</view>
-
-      <view class="weui-cells weui-cells_form code-cells">
-        <view class="weui-cell">
-          <view class="weui-cell__bd">
-            <input
-              class="weui-input code-input"
-              type="number"
-              maxlength="6"
-              placeholder="请输入验证码"
-              bindinput="onCodeInput"
-              value="{{code}}"
-            />
-          </view>
-        </view>
+    <view class="card" wx:if="{{step === 2}}">
+      <view class="card-icon">🔐</view>
+      <view class="card-label">验证码</view>
+      <view class="card-desc">已发送至 {{maskedPhone}}</view>
+      <view class="code-row">
+        <input
+          class="code-input"
+          type="number"
+          maxlength="6"
+          placeholder="请输入验证码"
+          placeholder-class="placeholder"
+          bindinput="onCodeInput"
+          value="{{code}}"
+        />
       </view>
-
-      <view class="btn-area">
-        <button
-          class="weui-btn {{code.length === 6 ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
-          bindtap="doLogin"
-          disabled="{{code.length !== 6}}"
-        >登录</button>
-      </view>
-
-      <view class="resend-area">
+      <button
+        class="btn {{code.length === 6 ? 'btn-active' : ''}}"
+        bindtap="doLogin"
+        disabled="{{code.length !== 6}}"
+      >登录</button>
+      <view class="resend-row">
         <text class="{{counting ? 'resend-disabled' : 'resend'}}" bindtap="resendCode">
-          {{counting ? count + '秒后重发' : '重新发送'}}
+          {{counting ? count + '秒后重发' : '重新发送验证码'}}
         </text>
       </view>
     </view>

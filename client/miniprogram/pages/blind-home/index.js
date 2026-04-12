@@ -1,4 +1,5 @@
 const app = getApp()
+const api = require('../../utils/api.js')
 
 // 计算两点之间的距离（单位：公里）
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -50,17 +51,39 @@ Page({
   loadData() {
     this.setData({ isLoading: true })
 
-    // TODO: 从本地存储或API加载真实数据
-    const mySignups = wx.getStorageSync('mySignups') || []
-    let activities = wx.getStorageSync('activities') || []
+    // 从API加载活动列表
+    api.getActivities().then(activities => {
+      const formatted = (activities || []).map(a => ({
+        id: a.id,
+        title: a.title,
+        clubName: a.club_name,
+        date: a.date_time ? a.date_time.split('T')[0] : '',
+        time: a.date_time ? a.date_time.split('T')[1]?.substring(0, 5) : '',
+        location: a.location,
+        status: a.status || 'upcoming',
+        signupCount: a.signup_count || 0,
+        latitude: a.latitude,
+        longitude: a.longitude
+      }))
 
-    // 计算每个活动到用户的距离
-    activities = this.calculateActivitiesDistance(activities)
+      // 计算每个活动到用户的距离
+      const withDistance = this.calculateActivitiesDistance(formatted)
 
-    this.setData({
-      mySignups,
-      activities,
-      isLoading: false
+      this.setData({
+        activities: withDistance,
+        mySignups: wx.getStorageSync('mySignups') || [],
+        isLoading: false
+      })
+    }).catch(() => {
+      // 失败时使用本地存储
+      const mySignups = wx.getStorageSync('mySignups') || []
+      const activities = wx.getStorageSync('activities') || []
+      const withDistance = this.calculateActivitiesDistance(activities)
+      this.setData({
+        mySignups,
+        activities: withDistance,
+        isLoading: false
+      })
     })
   },
 

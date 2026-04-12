@@ -1,82 +1,194 @@
-/* WeUI 登录页 */
+/* 登录页 */
 .page {
   min-height: 100vh;
-  background: #F7F7F7;
+  background: linear-gradient(180deg, #FFF9F5 0%, #FFF5F0 100%);
+  position: relative;
+  overflow: hidden;
 }
 
-/* 头部 */
-.header {
-  display: flex;
-  align-items: center;
-  padding: 80rpx 32rpx 24rpx;
-  background: #fff;
+/* 背景 */
+.bg-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
 }
 
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.bg-circle-1 {
+  width: 500rpx;
+  height: 500rpx;
+  background: linear-gradient(135deg, #FFE4D6 0%, #FFDDD0 100%);
+  top: -200rpx;
+  right: -150rpx;
+}
+
+.bg-circle-2 {
+  width: 300rpx;
+  height: 300rpx;
+  background: linear-gradient(135deg, #E8F4FF 0%, #D6EDFF 100%);
+  bottom: 200rpx;
+  left: -100rpx;
+}
+
+/* 顶部 */
+.hero {
+  padding: 100rpx 48rpx 40rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 10rpx 28rpx;
+  background: linear-gradient(135deg, #FF8C69 0%, #FF6B5B 100%);
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 700;
+  border-radius: 100rpx;
+  margin-bottom: 20rpx;
+}
+
+.hero-title {
+  font-size: 52rpx;
+  font-weight: 900;
+  color: #2D2D2D;
+  margin-bottom: 10rpx;
+}
+
+.hero-subtitle {
+  font-size: 28rpx;
+  color: #8C8C8C;
+}
+
+/* 返回按钮 */
 .back-btn {
-  font-size: 60rpx;
+  font-size: 64rpx;
   color: #333;
-  padding: 0 8rpx;
-}
-
-.header-title {
-  flex: 1;
-  text-align: center;
-  font-size: 32rpx;
-  font-weight: 500;
-  color: #333;
-  padding-right: 68rpx;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 24rpx;
+  display: inline-block;
 }
 
 /* 内容 */
 .content {
-  padding: 48rpx 32rpx;
+  padding: 0 48rpx 60rpx;
+  position: relative;
+  z-index: 1;
 }
 
-/* 步骤内容 */
-.step-content {
-  display: none;
+/* 卡片 */
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 36rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
 }
 
-.step-content.active {
-  display: block;
+.card-icon {
+  font-size: 56rpx;
+  margin-bottom: 12rpx;
 }
 
-/* 页面描述 */
-.page-desc {
-  font-size: 28rpx;
-  color: #666;
-  text-align: center;
-  margin-bottom: 32rpx;
+.card-label {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #2D2D2D;
+  margin-bottom: 6rpx;
 }
 
-/* 验证码输入 */
-.code-cells {
-  margin-bottom: 32rpx;
+.card-desc {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 24rpx;
+}
+
+/* 手机号 */
+.phone-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 2rpx solid #e8e8e8;
+  padding-bottom: 20rpx;
+  margin: 24rpx 0 32rpx;
+}
+
+.phone-prefix {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-right: 16rpx;
+}
+
+.phone-input {
+  flex: 1;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.placeholder {
+  color: #ccc;
+}
+
+/* 验证码 */
+.code-row {
+  border-bottom: 2rpx solid #e8e8e8;
+  padding-bottom: 20rpx;
+  margin: 24rpx 0 32rpx;
 }
 
 .code-input {
+  font-size: 40rpx;
+  font-weight: 700;
   letter-spacing: 8rpx;
-  text-align: center;
-  font-size: 36rpx;
+  color: #333;
+  width: 100%;
 }
 
-/* 按钮区域 */
-.btn-area {
-  margin-top: 48rpx;
+/* 按钮 */
+.btn {
+  width: 100%;
+  height: 96rpx;
+  background: #e8e8e8;
+  color: #fff;
+  border-radius: 100rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: background 0.2s;
 }
 
-/* 重发区域 */
-.resend-area {
+.btn-active {
+  background: #07C160;
+}
+
+.btn::after {
+  border: none;
+}
+
+/* 重发 */
+.resend-row {
   text-align: center;
-  margin-top: 32rpx;
+  margin-top: 28rpx;
 }
 
 .resend {
-  font-size: 28rpx;
+  font-size: 26rpx;
   color: #576B95;
 }
 
 .resend-disabled {
-  font-size: 28rpx;
-  color: #999;
+  font-size: 26rpx;
+  color: #ccc;
 }

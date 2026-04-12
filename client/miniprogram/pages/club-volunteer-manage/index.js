@@ -1,4 +1,5 @@
 const app = getApp()
+const api = require('../../utils/api.js')
 
 // 性别映射
 const genderMap = {
@@ -18,7 +19,8 @@ Page({
   data: {
     activeTab: 'pending',
     pendingList: [],
-    memberList: []
+    memberList: [],
+    isLoading: false
   },
 
   onShow() {
@@ -26,26 +28,38 @@ Page({
   },
 
   loadData() {
-    // 从本地存储加载跑团数据
-    const clubData = wx.getStorageSync('clubData') || {}
+    this.setData({ isLoading: true })
+    const phone = wx.getStorageSync('phone')
+    if (!phone) {
+      this.setData({ isLoading: false })
+      return
+    }
 
-    // 处理待审核列表
-    const pendingList = (clubData.pendingVolunteers || []).map(v => ({
-      ...v,
-      gender: genderMap[v.gender] || v.gender || '',
-      experience: experienceMap[v.experience] || v.experience || ''
-    }))
+    api.getClub(phone).then(club => {
+      const pendingList = (club.pendingApplications || []).map(a => ({
+        id: a.id,
+        name: a.user_name || '志愿者',
+        phone: a.user_phone || '',
+        gender: genderMap[a.gender] || '',
+        experience: experienceMap[a.experience] || ''
+      }))
 
-    // 处理已加入志愿者列表
-    const memberList = (clubData.volunteers || []).map(v => ({
-      ...v,
-      gender: genderMap[v.gender] || v.gender || '',
-      experience: experienceMap[v.experience] || v.experience || ''
-    }))
+      const memberList = (club.volunteers || []).map(v => ({
+        id: v.id,
+        name: v.name || '志愿者',
+        phone: v.phone || '',
+        gender: genderMap[v.gender] || '',
+        experience: experienceMap[v.experience] || ''
+      }))
 
-    this.setData({
-      pendingList,
-      memberList
+      this.setData({
+        pendingList,
+        memberList,
+        isLoading: false
+      })
+    }).catch(err => {
+      this.setData({ isLoading: false })
+      console.error('getClub error:', err)
     })
   },
 
@@ -62,7 +76,6 @@ Page({
   approveVolunteer(e) {
     const id = e.currentTarget.dataset.id
     const volunteer = this.data.pendingList.find(v => v.id === id)
-
     if (!volunteer) return
 
     wx.showModal({
@@ -70,19 +83,7 @@ Page({
       content: `确认通过「${volunteer.name}」的加入申请？`,
       success: (res) => {
         if (res.confirm) {
-          // 从待审核移到已加入
-          const pendingList = this.data.pendingList.filter(v => v.id !== id)
-          const memberList = [
-            ...this.data.memberList,
-            { ...volunteer, joinTime: new Date().toLocaleDateString() }
-          ]
-
-          this.setData({ pendingList, memberList })
-
-          // 同步到存储
-          this.syncData()
-
-          wx.showToast({ title: '已通过', icon: 'success' })
+          this.doReview(id, 'approve')
         }
       }
     })
@@ -92,7 +93,6 @@ Page({
   rejectVolunteer(e) {
     const id = e.currentTarget.dataset.id
     const volunteer = this.data.pendingList.find(v => v.id === id)
-
     if (!volunteer) return
 
     wx.showModal({
@@ -100,30 +100,26 @@ Page({
       content: `确定拒绝「${volunteer.name}」的加入申请？`,
       success: (res) => {
         if (res.confirm) {
-          // 从待审核列表移除
-          const pendingList = this.data.pendingList.filter(v => v.id !== id)
-
-          this.setData({ pendingList })
-
-          // 同步到存储
-          this.syncData()
-
-          wx.showToast({ title: '已拒绝', icon: 'success' })
+          this.doReview(id, 'reject')
         }
       }
     })
   },
 
-  // 同步数据到存储
-  syncData() {
-    const clubData = wx.getStorageSync('clubData') || {}
+  doReview(applicationId, action) {
+    const phone = wx.getStorageSync('phone')
+    wx.showLoading({ title: '处理中...', mask: true })
 
-    // 更新pendingVolunteers和volunteers
-    clubData.pendingVolunteers = this.data.pendingList
-    clubData.volunteers = this.data.memberList
-    clubData.pendingCount = this.data.pendingList.length
-    clubData.memberCount = this.data.memberList.length
-
-    wx.setStorageSync('clubData', clubData)
+    api.getClub(phone).then(club => {
+      return api.reviewApplication(applicationId, action, club.id)
+    }).then(() => {
+      wx.hideLoading()
+      wx.showToast({ title: action === 'approve' ? '已通过' : '已拒绝', icon: 'success' })
+      this.loadData()
+    }).catch(err => {
+      wx.hideLoading()
+      wx.showToast({ title: '操作失败', icon: 'none' })
+      console.error('reviewApplication error:', err)
+    })
   }
 })

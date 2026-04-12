@@ -1,4 +1,5 @@
 const app = getApp()
+const api = require('../../utils/api.js')
 
 Page({
   data: {
@@ -12,6 +13,7 @@ Page({
   onLoad() {
     // 加载已有用户信息（编辑模式）
     const userInfo = app.globalData.userInfo
+    const userType = app.globalData.userType
     if (userInfo) {
       this.setData({
         name: userInfo.name || '',
@@ -21,6 +23,7 @@ Page({
       })
       this.updateCanSubmit()
     }
+    this.setData({ userType })
   },
 
   onShow() {
@@ -58,13 +61,16 @@ Page({
   },
 
   updateCanSubmit() {
-    const { name, gender, age, experience } = this.data
-    const canSubmit = !!(name && gender && age && experience)
+    const { name, gender, age, experience, userType } = this.data
+    let canSubmit = !!(name && gender && experience)
+    if (userType !== 'volunteer' && userType !== 'group') {
+      canSubmit = canSubmit && !!(age && parseInt(age) > 0)
+    }
     this.setData({ canSubmit })
   },
 
   doSubmit() {
-    const { name, gender, age, experience } = this.data
+    const { name, gender, age, experience, userType } = this.data
 
     if (!name) {
       wx.showToast({ title: '请输入姓名', icon: 'none' })
@@ -76,9 +82,11 @@ Page({
       return
     }
 
-    if (!age || parseInt(age) < 1 || parseInt(age) > 150) {
-      wx.showToast({ title: '请输入正确年龄', icon: 'none' })
-      return
+    if (userType !== 'volunteer' && userType !== 'group') {
+      if (!age || parseInt(age) < 1 || parseInt(age) > 150) {
+        wx.showToast({ title: '请输入正确年龄', icon: 'none' })
+        return
+      }
     }
 
     if (!experience) {
@@ -90,7 +98,7 @@ Page({
     const userInfo = {
       name,
       gender,
-      age: parseInt(age),
+      age: parseInt(age) || null,
       experience,
       phone: wx.getStorageSync('phone'),
       userType: app.globalData.userType
@@ -99,13 +107,28 @@ Page({
     app.globalData.userInfo = userInfo
     wx.setStorageSync('userInfo', userInfo)
 
-    console.log('用户信息:', userInfo)
+    // 同步到后端
+    wx.showLoading({ title: '保存中...', mask: true })
+    api.updateUser(
+      userInfo.phone,
+      userInfo.userType,
+      { name, gender, age: userInfo.age, experience }
+    ).then(() => {
+      wx.hideLoading()
+      this.navigateNext()
+    }).catch(err => {
+      wx.hideLoading()
+      // 即使API失败也继续导航
+      console.error('updateUser error:', err)
+      this.navigateNext()
+    })
+  },
 
-    // 根据用户类型跳转到下一步
-    const userType = app.globalData.userType
+  navigateNext() {
+    const userTypeKey = app.globalData.userType
     let nextPage = ''
 
-    switch (userType) {
+    switch (userTypeKey) {
       case 'blind':
         nextPage = '/pages/disability-proof/index'
         break

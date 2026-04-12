@@ -1,4 +1,5 @@
 const app = getApp()
+const api = require('../../utils/api.js')
 
 Page({
   data: {
@@ -10,33 +11,60 @@ Page({
     activeTab: 'activities',
     activities: [],
     pendingMembers: [],
-    joinedMembers: []
+    joinedMembers: [],
+    isLoading: false
   },
 
   onShow() {
-    // 从全局获取跑团信息
-    const clubInfo = app.globalData.clubInfo
-    if (clubInfo && clubInfo.name) {
-      this.setData({ clubName: clubInfo.name })
-    }
-
-    // 加载数据
     this.loadData()
   },
 
   loadData() {
-    // TODO: 从API或本地存储加载真实数据
-    const clubData = wx.getStorageSync('clubData') || {}
+    this.setData({ isLoading: true })
+    const phone = wx.getStorageSync('phone')
+    if (!phone) {
+      this.setData({ isLoading: false })
+      return
+    }
 
-    this.setData({
-      clubName: clubData.name || '我的跑团',
-      memberCount: clubData.memberCount || 0,
-      pendingCount: clubData.pendingCount || 0,
-      totalActivities: clubData.totalActivities || 0,
-      totalHelped: clubData.totalHelped || 0,
-      activities: clubData.activities || [],
-      pendingMembers: clubData.pendingMembers || [],
-      joinedMembers: clubData.joinedMembers || []
+    // 获取跑团详情
+    api.getClub(phone).then(club => {
+      app.globalData.clubInfo = club
+
+      this.setData({
+        clubName: club.name || '我的跑团',
+        memberCount: club.member_count || 0,
+        totalActivities: club.total_activities || 0,
+        totalHelped: club.total_helped || 0,
+        pendingMembers: (club.pendingApplications || []).map(a => ({
+          id: a.id,
+          name: a.user_name,
+          phone: a.user_phone,
+          applyTime: a.create_time ? a.create_time.split('T')[0] : ''
+        })),
+        joinedMembers: (club.volunteers || []).map(v => ({
+          id: v.id,
+          name: v.name || '志愿者',
+          phone: v.phone,
+          joinTime: v.last_login ? v.last_login.split('T')[0] : ''
+        })),
+        activities: (club.activities || []).map(a => ({
+          id: a.id,
+          title: a.title,
+          dateText: a.date_time ? a.date_time.replace('T', ' ').substring(0, 16) : '',
+          location: a.location || '',
+          status: a.status || 'upcoming',
+          statusText: a.status === 'cancelled' ? '已取消' : a.status === 'completed' ? '已完成' : '进行中',
+          signups: a.signup_count || 0,
+          confirmed: 0
+        })),
+        pendingCount: (club.pendingApplications || []).length,
+        isLoading: false
+      })
+    }).catch(err => {
+      this.setData({ isLoading: false })
+      wx.showToast({ title: '加载失败', icon: 'none' })
+      console.error('getClub error:', err)
     })
   },
 
@@ -44,8 +72,6 @@ Page({
     const tab = e.currentTarget.dataset.tab
     this.setData({ activeTab: tab })
   },
-
-  // 注意：移除了 goToCreateActivity 函数，跑团不能发布活动
 
   goToSignups(e) {
     const id = e.currentTarget.dataset.id
@@ -57,7 +83,6 @@ Page({
   approveMember(e) {
     const id = e.currentTarget.dataset.id
     const member = this.data.pendingMembers.find(m => m.id === id)
-
     if (!member) return
 
     wx.showModal({
@@ -65,45 +90,44 @@ Page({
       content: `确认通过「${member.name}」的加入申请？`,
       success: (res) => {
         if (res.confirm) {
-          // TODO: 调用API审核通过
-          const pendingMembers = this.data.pendingMembers.filter(m => m.id !== id)
-          const joinedMembers = [
-            ...this.data.joinedMembers,
-            { ...member, joinTime: new Date().toISOString().split('T')[0] }
-          ]
-
-          this.setData({
-            pendingMembers,
-            joinedMembers,
-            memberCount: this.data.memberCount + 1,
-            pendingCount: this.data.pendingCount - 1
-          })
-
-          wx.showToast({
-            title: '已通过',
-            icon: 'success'
-          })
-
-          // 同步到存储
-          this.syncClubData()
+          this.doReview(id, 'approve')
         }
       }
     })
   },
 
-  // 同步数据到存储
-  syncClubData() {
-    const clubData = {
-      name: this.data.clubName,
-      memberCount: this.data.memberCount,
-      pendingCount: this.data.pendingCount,
-      totalActivities: this.data.totalActivities,
-      totalHelped: this.data.totalHelped,
-      activities: this.data.activities,
-      pendingMembers: this.data.pendingMembers,
-      joinedMembers: this.data.joinedMembers
-    }
-    wx.setStorageSync('clubData', clubData)
+  rejectMember(e) {
+    const id = e.currentTarget.dataset.id
+    const member = this.data.pendingMembers.find(m => m.id === id)
+    if (!member) return
+
+    wx.showModal({
+      title: '拒绝申请',
+      content: `确认拒绝「${member.name}」的加入申请？`,
+      success: (res) => {
+        if (res.confirm) {
+          this.doReview(id, 'reject')
+        }
+      }
+    })
+  },
+
+  doReview(applicationId, action) {
+    const phone = wx.getStorageSync('phone')
+
+    wx.showLoading({ title: '处理中...', mask: true })
+    api.getClub(phone).then(club => {
+      return api.reviewApplication(applicationId, action, club.id)
+    }).then(() => {
+      wx.hideLoading()
+      wx.showToast({ title: action === 'approve' ? '已通过' : '已拒绝', icon: 'success' })
+      // 重新加载数据
+      this.loadData()
+    }).catch(err => {
+      wx.hideLoading()
+      wx.showToast({ title: '操作失败', icon: 'none' })
+      console.error('reviewApplication error:', err)
+    })
   },
 
   goToMy() {

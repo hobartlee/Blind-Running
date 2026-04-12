@@ -1,68 +1,40 @@
 <view class="page">
-  <!-- 头部 -->
-  <view class="header">
+  <!-- 背景装饰 -->
+  <view class="bg-decoration">
+    <view class="bg-circle bg-circle-1"></view>
+    <view class="bg-circle bg-circle-2"></view>
+  </view>
+
+  <!-- 顶部 -->
+  <view class="hero">
     <view class="back-btn" bindtap="goBack">‹</view>
-    <view class="header-title">残疾人证明</view>
+    <view class="hero-title">是否持有残疾人证明？</view>
   </view>
 
   <!-- 内容 -->
   <view class="content">
-    <!-- 介绍区域 -->
-    <view class="intro-section">
-      <view class="intro-icon-text">视</view>
-      <view class="intro-title">视障人士认证</view>
-      <view class="intro-desc">平台为视障跑者提供专属服务</view>
-    </view>
-
-    <!-- 认证卡片 -->
-    <view class="cert-card">
-      <view class="cert-header">
-        <view class="cert-icon-text">视</view>
-        <view class="cert-info">
-          <view class="cert-name">视障人士认证</view>
-          <view class="cert-sub">平台为视障跑者提供专属服务</view>
-        </view>
-      </view>
-      <view class="cert-benefits">
-        <view class="benefit-item">✓ 专属活动推荐与匹配</view>
-        <view class="benefit-item">✓ 专业志愿者陪伴</view>
-        <view class="benefit-item">✓ 优先预约陪跑服务</view>
+    <view class="choice-card {{hasProof === true ? 'selected' : ''}}" bindtap="selectProof" data-value="true">
+      <view class="choice-icon">✓</view>
+      <view class="choice-text">
+        <view class="choice-name">有证明</view>
+        <view class="choice-desc">可享受专属服务</view>
       </view>
     </view>
 
-    <!-- 选择区域 -->
-    <view class="select-section">
-      <view class="select-label">是否持有残疾人证明？</view>
-      <view class="select-buttons">
-        <view
-          class="select-btn {{hasProof === true ? 'active' : ''}}"
-          bindtap="selectProof"
-          data-value="true"
-        >
-          <view class="select-icon">✓</view>
-          <view class="select-text">有证明</view>
-        </view>
-        <view
-          class="select-btn {{hasProof === false ? 'active' : ''}}"
-          bindtap="selectProof"
-          data-value="false"
-        >
-          <view class="select-icon">○</view>
-          <view class="select-text">暂无证明</view>
-        </view>
-      </view>
-      <view class="select-hint {{showHint ? 'show' : ''}}">
-        暂无证明也可使用平台部分功能，但无法享受专属服务
+    <view class="choice-card {{hasProof === false ? 'selected' : ''}}" bindtap="selectProof" data-value="false">
+      <view class="choice-icon">○</view>
+      <view class="choice-text">
+        <view class="choice-name">暂无证明</view>
+        <view class="choice-desc">可使用平台部分功能</view>
       </view>
     </view>
 
-    <!-- 提交按钮 -->
-    <view class="btn-area">
-      <button
-        class="weui-btn {{canSubmit ? 'weui-btn_primary' : 'weui-btn_disabled'}}"
-        bindtap="doNext"
-        disabled="{{!canSubmit}}"
-      >下一步</button>
-    </view>
+    <view class="hint" wx:if="{{hasProof === false}}">暂无证明也可使用平台，可后续补充认证</view>
+
+    <button
+      class="btn {{hasProof !== null ? 'btn-active' : ''}}"
+      bindtap="doNext"
+      disabled="{{hasProof === null}}"
+    >下一步</button>
   </view>
 </view>

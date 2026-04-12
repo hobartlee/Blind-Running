@@ -66,9 +66,12 @@ Page({
     const userType = app.globalData.userType || 'volunteer'
     const config = missionConfig[userType] || missionConfig.volunteer
 
+    // 映射 club -> group 保持一致
+    const mappedUserType = userType === 'club' ? 'group' : userType
+
     this.setData({
       ...config,
-      userType
+      userType: mappedUserType
     })
   },
 
